@@ -1,0 +1,1848 @@
+openapi: 3.0.0
+info:
+  title: DealPoint Public API
+  description: Public API allowing access to DealPoint.
+  contact:
+    name: Roelof Hoogenberg
+    email: roelof@bxfin.com
+  version: 0.1.0
+servers:
+- url: https://api.bxfin.com/api/v0.1
+  description: Optional server description, e.g. Main (production) server
+- url: https://staging-api.example.com/api/v0.1
+  description: Optional server description, e.g. Internal staging server for testing
+security:
+- BasicAuth: []
+- ApiKeyAuth: []
+paths:
+  /relationship:
+    get:
+      tags:
+      - Relationship
+      summary: Retrieve all relationships the actor is allowed to view in DealPoint
+      operationId: getRelationships
+      parameters:
+      - name: relationship_id
+        in: query
+        description: relationship identifier
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: outer_customer_id
+        in: query
+        description: Customer id as externally known
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: relationship_name
+        in: query
+        description: (part of the) name of the relationship (client)
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: status
+        in: query
+        description: 'Status of the relationship [todo: conver to enum]'
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: offset
+        in: query
+        description: The number of items to skip before starting to collect the result
+          set.
+        required: false
+        style: form
+        explode: true
+        schema:
+          minimum: 0
+          type: integer
+          default: 0
+      - name: limit
+        in: query
+        description: The number of items to return.
+        required: false
+        style: form
+        explode: true
+        schema:
+          maximum: 100
+          minimum: 1
+          type: integer
+          default: 20
+      - name: sort
+        in: query
+        description: sorting order of the result set
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+          default: OuterRelationshipId
+      - name: x-system-caller
+        in: header
+        description: Identification of the calling application.
+        required: false
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: x-dpx-actor-id
+        in: header
+        description: Identification of the end-user (DPX internal id).
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Overview of relationships the actor is allowed to view
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/relationshipList'
+        "400":
+          description: Invalid input value
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "401":
+          description: |-
+            Unauthorized, expect this for the following types of errors
+            - BadAuthTicket
+            - ExpiredAuthTicket
+            - InsufficientAuthTicket
+            - InvalidAuthTicket
+            - InvalidUserAuth
+            - RequestIsNotAuthenticated
+            - TamperedAuthTicket
+            - UnauthorizedAccess
+            - UnManagedInvalidSecurityPrincipal
+        "403":
+          description: |-
+            Forbidden, expect this for the following types of errors
+            - AccessDenied
+            - AttributePermissionReadIsMissing
+            - AttributePermissionUpdateIsMissingDuringUpdate
+            - AttributePrivilegeCreateIsMissing
+            - InvalidAccessRights
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "500":
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    post:
+      tags:
+      - Relationship
+      summary: Adds a new  relationship to the relationship in  DealPoint. A relationship
+        consist of the relationship, one or more products and the relationship.
+      operationId: createrelationship
+      parameters:
+      - name: x-system-caller
+        in: header
+        description: Identification of the calling application.
+        required: false
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: x-dpx-actor-id
+        in: header
+        description: Identification of the end-user (DPX internal id).
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/relationship'
+        required: true
+      responses:
+        "201":
+          description: relationship id (key)
+          headers:
+            EntityId:
+              $ref: '#/components/schemas/EntityId'
+        "400":
+          description: Invalid input value
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "401":
+          description: |-
+            Unauthorized, expect this for the following types of errors
+            - BadAuthTicket
+            - ExpiredAuthTicket
+            - InsufficientAuthTicket
+            - InvalidAuthTicket
+            - InvalidUserAuth
+            - RequestIsNotAuthenticated
+            - TamperedAuthTicket
+            - UnauthorizedAccess
+            - UnManagedInvalidSecurityPrincipal
+        "403":
+          description: |-
+            Forbidden, expect this for the following types of errors
+            - AccessDenied
+            - AttributePermissionReadIsMissing
+            - AttributePermissionUpdateIsMissingDuringUpdate
+            - AttributePrivilegeCreateIsMissing
+            - InvalidAccessRights
+        "500":
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /relationship/{id}:
+    get:
+      tags:
+      - Relationship
+      summary: Retrieve a specific relationship the actor is allowed to view from
+        DealPoint. A relationship consist of one or more products, a relationship-team
+        and the relationship.
+      operationId: getrelationship
+      parameters:
+      - name: id
+        in: path
+        description: relationship identifier
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: x-system-caller
+        in: header
+        description: Identification of the calling application.
+        required: false
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: x-dpx-actor-id
+        in: header
+        description: Identification of the end-user.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: relationship details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/relationship'
+        "400":
+          description: Invalid input value
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "401":
+          description: |-
+            Unauthorized, expect this for the following types of errors
+            - BadAuthTicket
+            - ExpiredAuthTicket
+            - InsufficientAuthTicket
+            - InvalidAuthTicket
+            - InvalidUserAuth
+            - RequestIsNotAuthenticated
+            - TamperedAuthTicket
+            - UnauthorizedAccess
+            - UnManagedInvalidSecurityPrincipal
+        "403":
+          description: |-
+            Forbidden, expect this for the following types of errors
+            - AccessDenied
+            - AttributePermissionReadIsMissing
+            - AttributePermissionUpdateIsMissingDuringUpdate
+            - AttributePrivilegeCreateIsMissing
+            - InvalidAccessRights'
+        "404":
+          description: relationship-id not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "500":
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    delete:
+      tags:
+      - Relationship
+      summary: Deletes the relationship from the system.
+      operationId: deleteRelationship
+      parameters:
+      - name: id
+        in: path
+        description: relationship identifier
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: x-system-caller
+        in: header
+        description: Identification of the calling application.
+        required: false
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: x-dpx-actor-id
+        in: header
+        description: Identification of the end-user (DPX internal id).
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "204":
+          description: No content
+        "400":
+          description: Invalid input value
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "401":
+          description: |-
+            Unauthorized, expect this for the following types of errors
+            - BadAuthTicket
+            - ExpiredAuthTicket
+            - InsufficientAuthTicket
+            - InvalidAuthTicket
+            - InvalidUserAuth
+            - RequestIsNotAuthenticated
+            - TamperedAuthTicket
+            - UnauthorizedAccess
+            - UnManagedInvalidSecurityPrincipal
+        "403":
+          description: |-
+            Forbidden, expect this for the following types of errors
+            - AccessDenied
+            - AttributePermissionReadIsMissing
+            - AttributePermissionUpdateIsMissingDuringUpdate
+            - AttributePrivilegeCreateIsMissing
+            - InvalidAccessRights
+        "404":
+          description: Relationship-id not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "500":
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    patch:
+      tags:
+      - Relationship
+      summary: Updates the relationship with new values.
+      operationId: updaterelationship
+      parameters:
+      - name: id
+        in: path
+        description: relationship identifier
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: x-system-caller
+        in: header
+        description: Identification of the calling application.
+        required: false
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: x-dpx-actor-id
+        in: header
+        description: Identification of the end-user (DPX internal id).
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/relationship'
+        required: true
+      responses:
+        "204":
+          description: relationship id (key)
+          headers:
+            EntityId:
+              $ref: '#/components/schemas/EntityId'
+        "400":
+          description: Invalid input value
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "401":
+          description: |-
+            Unauthorized, expect this for the following types of errors
+            - BadAuthTicket
+            - ExpiredAuthTicket
+            - InsufficientAuthTicket
+            - InvalidAuthTicket
+            - InvalidUserAuth
+            - RequestIsNotAuthenticated
+            - TamperedAuthTicket
+            - UnauthorizedAccess
+            - UnManagedInvalidSecurityPrincipal
+        "403":
+          description: |-
+            Forbidden, expect this for the following types of errors
+            - AccessDenied
+            - AttributePermissionReadIsMissing
+            - AttributePermissionUpdateIsMissingDuringUpdate
+            - AttributePrivilegeCreateIsMissing
+            - InvalidAccessRights
+        "404":
+          description: relationship-id not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "500":
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /deal:
+    get:
+      tags:
+      - Deal
+      summary: Retrieve all deals the actor is allowed to view in DealPoint
+      operationId: getDeals
+      parameters:
+      - name: relationship_id
+        in: query
+        description: relationship identifier
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: relationship_name
+        in: query
+        description: (part of the) name of the relationship
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: status
+        in: query
+        description: 'Status of the deal [todo: conver to enum]'
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: offset
+        in: query
+        description: The number of items to skip before starting to collect the result
+          set.
+        required: false
+        style: form
+        explode: true
+        schema:
+          minimum: 0
+          type: integer
+          default: 0
+      - name: limit
+        in: query
+        description: The number of items to return.
+        required: false
+        style: form
+        explode: true
+        schema:
+          maximum: 100
+          minimum: 1
+          type: integer
+          default: 20
+      - name: sort
+        in: query
+        description: sorting order of the result set
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+          default: OuterDealId
+      - name: x-system-caller
+        in: header
+        description: Identification of the calling application.
+        required: false
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: x-dpx-actor-id
+        in: header
+        description: Identification of the end-user (DPX internal id).
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Overview of deals the actor is allowed to view
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/dealList'
+        "400":
+          description: Invalid input value
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "401":
+          description: |-
+            Unauthorized, expect this for the following types of errors
+            - BadAuthTicket
+            - ExpiredAuthTicket
+            - InsufficientAuthTicket
+            - InvalidAuthTicket
+            - InvalidUserAuth
+            - RequestIsNotAuthenticated
+            - TamperedAuthTicket
+            - UnauthorizedAccess
+            - UnManagedInvalidSecurityPrincipal
+        "403":
+          description: |-
+            Forbidden, expect this for the following types of errors
+            - AccessDenied
+            - AttributePermissionReadIsMissing
+            - AttributePermissionUpdateIsMissingDuringUpdate
+            - AttributePrivilegeCreateIsMissing
+            - InvalidAccessRights
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "500":
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    post:
+      tags:
+      - Deal
+      summary: Adds a new  Deal to the relationship in  DealPoint. A Deal consist
+        of the deal, one or more products and the relationship.
+      operationId: createDeal
+      parameters:
+      - name: x-system-caller
+        in: header
+        description: Identification of the calling application.
+        required: false
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: x-dpx-actor-id
+        in: header
+        description: Identification of the end-user (DPX internal id).
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/deal'
+        required: true
+      responses:
+        "201":
+          description: Deal id (key)
+          headers:
+            EntityId:
+              $ref: '#/components/schemas/EntityId'
+        "400":
+          description: Invalid input value
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "401":
+          description: |-
+            Unauthorized, expect this for the following types of errors
+            - BadAuthTicket
+            - ExpiredAuthTicket
+            - InsufficientAuthTicket
+            - InvalidAuthTicket
+            - InvalidUserAuth
+            - RequestIsNotAuthenticated
+            - TamperedAuthTicket
+            - UnauthorizedAccess
+            - UnManagedInvalidSecurityPrincipal
+        "403":
+          description: |-
+            Forbidden, expect this for the following types of errors
+            - AccessDenied
+            - AttributePermissionReadIsMissing
+            - AttributePermissionUpdateIsMissingDuringUpdate
+            - AttributePrivilegeCreateIsMissing
+            - InvalidAccessRights
+        "500":
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /deal/{id}:
+    get:
+      tags:
+      - Deal
+      summary: Retrieve a specific deal the actor is allowed to view from DealPoint.
+        A Deal consist of one or more products, a deal-team and the relationship.
+      operationId: getDeal
+      parameters:
+      - name: id
+        in: path
+        description: Deal identifier
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: x-system-caller
+        in: header
+        description: Identification of the calling application.
+        required: false
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: x-dpx-actor-id
+        in: header
+        description: Identification of the end-user.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Deal details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/deal'
+        "400":
+          description: Invalid input value
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "401":
+          description: |-
+            Unauthorized, expect this for the following types of errors
+            - BadAuthTicket
+            - ExpiredAuthTicket
+            - InsufficientAuthTicket
+            - InvalidAuthTicket
+            - InvalidUserAuth
+            - RequestIsNotAuthenticated
+            - TamperedAuthTicket
+            - UnauthorizedAccess
+            - UnManagedInvalidSecurityPrincipal
+        "403":
+          description: |-
+            Forbidden, expect this for the following types of errors
+            - AccessDenied
+            - AttributePermissionReadIsMissing
+            - AttributePermissionUpdateIsMissingDuringUpdate
+            - AttributePrivilegeCreateIsMissing
+            - InvalidAccessRights'
+        "404":
+          description: Deal-id not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "500":
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    patch:
+      tags:
+      - Deal
+      summary: Updates the deal with new values.
+      operationId: updateDeal
+      parameters:
+      - name: id
+        in: path
+        description: Deal identifier
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: x-system-caller
+        in: header
+        description: Identification of the calling application.
+        required: false
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: x-dpx-actor-id
+        in: header
+        description: Identification of the end-user (DPX internal id).
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/deal'
+        required: true
+      responses:
+        "204":
+          description: Deal id (key)
+          headers:
+            EntityId:
+              $ref: '#/components/schemas/EntityId'
+        "400":
+          description: Invalid input value
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "401":
+          description: |-
+            Unauthorized, expect this for the following types of errors
+            - BadAuthTicket
+            - ExpiredAuthTicket
+            - InsufficientAuthTicket
+            - InvalidAuthTicket
+            - InvalidUserAuth
+            - RequestIsNotAuthenticated
+            - TamperedAuthTicket
+            - UnauthorizedAccess
+            - UnManagedInvalidSecurityPrincipal
+        "403":
+          description: |-
+            Forbidden, expect this for the following types of errors
+            - AccessDenied
+            - AttributePermissionReadIsMissing
+            - AttributePermissionUpdateIsMissingDuringUpdate
+            - AttributePrivilegeCreateIsMissing
+            - InvalidAccessRights
+        "404":
+          description: Deal-id not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "500":
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /usercontext:
+    get:
+      tags:
+      - User
+      summary: Based on Username, email, phonenumber or external context id,  the
+        UserId is retrieved from DealPoint (exact match search)
+      operationId: getUserContext
+      parameters:
+      - name: user_name
+        in: query
+        description: (part of the) name of the user
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: email
+        in: query
+        description: Email the user
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: phone_number
+        in: query
+        description: PhoneNumber of the user
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: x-system-caller
+        in: header
+        description: Identification of the calling application.
+        required: false
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: user details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/userContext'
+        "400":
+          description: Invalid input value
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "401":
+          description: |-
+            Unauthorized, expect this for the following types of errors
+            - BadAuthTicket
+            - ExpiredAuthTicket
+            - InsufficientAuthTicket
+            - InvalidAuthTicket
+            - InvalidUserAuth
+            - RequestIsNotAuthenticated
+            - TamperedAuthTicket
+            - UnauthorizedAccess
+            - UnManagedInvalidSecurityPrincipal
+        "403":
+          description: |-
+            Forbidden, expect this for the following types of errors
+            - AccessDenied
+            - AttributePermissionReadIsMissing
+            - AttributePermissionUpdateIsMissingDuringUpdate
+            - AttributePrivilegeCreateIsMissing
+            - InvalidAccessRights
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "404":
+          description: User not found
+        "500":
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    delete:
+      tags:
+      - Deal
+      summary: Deletes the deal from the system.
+      operationId: deleteDeal
+      parameters:
+      - name: id
+        in: path
+        description: deal identifier
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: x-system-caller
+        in: header
+        description: Identification of the calling application.
+        required: false
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: x-dpx-actor-id
+        in: header
+        description: Identification of the end-user (DPX internal id).
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "204":
+          description: No content
+        "400":
+          description: Invalid input value
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "401":
+          description: |-
+            Unauthorized, expect this for the following types of errors
+            - BadAuthTicket
+            - ExpiredAuthTicket
+            - InsufficientAuthTicket
+            - InvalidAuthTicket
+            - InvalidUserAuth
+            - RequestIsNotAuthenticated
+            - TamperedAuthTicket
+            - UnauthorizedAccess
+            - UnManagedInvalidSecurityPrincipal
+        "403":
+          description: |-
+            Forbidden, expect this for the following types of errors
+            - AccessDenied
+            - AttributePermissionReadIsMissing
+            - AttributePermissionUpdateIsMissingDuringUpdate
+            - AttributePrivilegeCreateIsMissing
+            - InvalidAccessRights
+        "404":
+          description: Deal-id not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "500":
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /user:
+    get:
+      tags:
+      - User
+      summary: Retrieve all users the actor is allowed to view in DealPoint
+      operationId: getUsers
+      parameters:
+      - name: user_name
+        in: query
+        description: (part of the) name of the user
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: email
+        in: query
+        description: Email the user
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: phone_number
+        in: query
+        description: PhoneNumber of the user
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: status
+        in: query
+        description: 'Status of the user [todo: conver to enum]'
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: offset
+        in: query
+        description: The number of items to skip before starting to collect the result
+          set.
+        required: false
+        style: form
+        explode: true
+        schema:
+          minimum: 0
+          type: integer
+          default: 0
+      - name: limit
+        in: query
+        description: The number of items to return.
+        required: false
+        style: form
+        explode: true
+        schema:
+          maximum: 100
+          minimum: 1
+          type: integer
+          default: 20
+      - name: sort
+        in: query
+        description: sorting order of the result set
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+          default: UserName
+      - name: x-system-caller
+        in: header
+        description: Identification of the calling application.
+        required: false
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: x-dpx-actor-id
+        in: header
+        description: Identification of the end-user (DPX internal id).
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Overview of users
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/userList'
+        "400":
+          description: Invalid input value
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "401":
+          description: |-
+            Unauthorized, expect this for the following types of errors
+            - BadAuthTicket
+            - ExpiredAuthTicket
+            - InsufficientAuthTicket
+            - InvalidAuthTicket
+            - InvalidUserAuth
+            - RequestIsNotAuthenticated
+            - TamperedAuthTicket
+            - UnauthorizedAccess
+            - UnManagedInvalidSecurityPrincipal
+        "403":
+          description: |-
+            Forbidden, expect this for the following types of errors
+            - AccessDenied
+            - AttributePermissionReadIsMissing
+            - AttributePermissionUpdateIsMissingDuringUpdate
+            - AttributePrivilegeCreateIsMissing
+            - InvalidAccessRights
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "500":
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    post:
+      tags:
+      - User
+      summary: 'Adds a new user to DealPoint. '
+      operationId: createUser
+      parameters:
+      - name: x-system-caller
+        in: header
+        description: Identification of the calling application.
+        required: false
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: x-dpx-actor-id
+        in: header
+        description: Identification of the end-user (DPX internal id).
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/user'
+        required: true
+      responses:
+        "201":
+          description: user id (key)
+          headers:
+            EntityId:
+              $ref: '#/components/schemas/EntityId'
+        "400":
+          description: Invalid input value
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "401":
+          description: |-
+            Unauthorized, expect this for the following types of errors
+            - BadAuthTicket
+            - ExpiredAuthTicket
+            - InsufficientAuthTicket
+            - InvalidAuthTicket
+            - InvalidUserAuth
+            - RequestIsNotAuthenticated
+            - TamperedAuthTicket
+            - UnauthorizedAccess
+            - UnManagedInvalidSecurityPrincipal
+        "403":
+          description: |-
+            Forbidden, expect this for the following types of errors
+            - AccessDenied
+            - AttributePermissionReadIsMissing
+            - AttributePermissionUpdateIsMissingDuringUpdate
+            - AttributePrivilegeCreateIsMissing
+            - InvalidAccessRights
+        "404":
+          description: User-id not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "500":
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /user/{id}:
+    get:
+      tags:
+      - User
+      summary: Retrieve a specific user from DealPoint.
+      operationId: getUser
+      parameters:
+      - name: id
+        in: path
+        description: user identifier
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: x-system-caller
+        in: header
+        description: Identification of the calling application.
+        required: false
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: x-dpx-actor-id
+        in: header
+        description: Identification of the end-user.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: User details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/user'
+        "400":
+          description: Invalid input value
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "401":
+          description: |-
+            Unauthorized, expect this for the following types of errors
+            - BadAuthTicket
+            - ExpiredAuthTicket
+            - InsufficientAuthTicket
+            - InvalidAuthTicket
+            - InvalidUserAuth
+            - RequestIsNotAuthenticated
+            - TamperedAuthTicket
+            - UnauthorizedAccess
+            - UnManagedInvalidSecurityPrincipal
+        "403":
+          description: |-
+            Forbidden, expect this for the following types of errors
+            - AccessDenied
+            - AttributePermissionReadIsMissing
+            - AttributePermissionUpdateIsMissingDuringUpdate
+            - AttributePrivilegeCreateIsMissing
+            - InvalidAccessRights'
+        "404":
+          description: user-id not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "500":
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    delete:
+      tags:
+      - User
+      summary: Deletes the user from the system.
+      operationId: deleteUser
+      parameters:
+      - name: id
+        in: path
+        description: user identifier
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: x-system-caller
+        in: header
+        description: Identification of the calling application.
+        required: false
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: x-dpx-actor-id
+        in: header
+        description: Identification of the end-user (DPX internal id).
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "204":
+          description: No content
+        "400":
+          description: Invalid input value
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "401":
+          description: |-
+            Unauthorized, expect this for the following types of errors
+            - BadAuthTicket
+            - ExpiredAuthTicket
+            - InsufficientAuthTicket
+            - InvalidAuthTicket
+            - InvalidUserAuth
+            - RequestIsNotAuthenticated
+            - TamperedAuthTicket
+            - UnauthorizedAccess
+            - UnManagedInvalidSecurityPrincipal
+        "403":
+          description: |-
+            Forbidden, expect this for the following types of errors
+            - AccessDenied
+            - AttributePermissionReadIsMissing
+            - AttributePermissionUpdateIsMissingDuringUpdate
+            - AttributePrivilegeCreateIsMissing
+            - InvalidAccessRights
+        "404":
+          description: User-id not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "500":
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    patch:
+      tags:
+      - User
+      summary: Updates the user with new values.
+      operationId: updateUser
+      parameters:
+      - name: id
+        in: path
+        description: user identifier
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: x-system-caller
+        in: header
+        description: Identification of the calling application.
+        required: false
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: x-dpx-actor-id
+        in: header
+        description: Identification of the end-user (DPX internal id).
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/user'
+        required: true
+      responses:
+        "204":
+          description: user id (key)
+          headers:
+            EntityId:
+              $ref: '#/components/schemas/EntityId'
+        "400":
+          description: Invalid input value
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "401":
+          description: |-
+            Unauthorized, expect this for the following types of errors
+            - BadAuthTicket
+            - ExpiredAuthTicket
+            - InsufficientAuthTicket
+            - InvalidAuthTicket
+            - InvalidUserAuth
+            - RequestIsNotAuthenticated
+            - TamperedAuthTicket
+            - UnauthorizedAccess
+            - UnManagedInvalidSecurityPrincipal
+        "403":
+          description: |-
+            Forbidden, expect this for the following types of errors
+            - AccessDenied
+            - AttributePermissionReadIsMissing
+            - AttributePermissionUpdateIsMissingDuringUpdate
+            - AttributePrivilegeCreateIsMissing
+            - InvalidAccessRights
+        "404":
+          description: User-id not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "500":
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+components:
+  schemas:
+    EntityId:
+      type: string
+      description: fully qualified id of created entity
+      example: '[Organization URI]/api/deal/v1.0/7eb682f1-ca75-e511-80d4-00155d2a68d1'
+    id:
+      type: string
+      description: Unique Id Generated by DPX
+      example: 95b608ef-e1e8-e811-8111-001dd8b80c9b
+    OuterDealId:
+      type: string
+      description: Unique Bank Id for Deal, typically mapped to relationship's system
+        OpportunityId (for integration)
+      example: 95b608ef-e1e8-e811-8111-001dd8b80c9b
+    OuterCustomerId:
+      type: string
+      description: Unique Bank Id for Relationship (for integration)
+      example: relationshipABC
+    ClientType:
+      type: string
+      description: Type of relationship
+      example: Wholesale
+    BookingStateLocation:
+      type: string
+      description: State where Relationship is based
+      example: London
+    CurrencyCode:
+      type: string
+      description: Currency Code
+      example: EUR
+    Exposure:
+      type: number
+      description: Exposure of the Enity
+      example: 1234533.22
+    Name:
+      type: string
+      description: Name of entity
+      example: EntityName
+    Description:
+      type: string
+      description: Description of entity
+      example: '....'
+    LGD:
+      type: string
+      description: Loss Given Default
+      example: 30%
+    PD:
+      type: string
+      description: Probability Default
+      example: AF6
+    Status:
+      type: string
+      description: Status of the object
+      example: state Open
+    StatusDate:
+      type: string
+      description: Deal Status Date (generated by DPX)
+      example: 2017-07-21T17:32:28Z
+    Syndicated:
+      type: boolean
+      description: Flag/checkbox to indicate Syndication Deal, financing offered by
+        group of lenders
+      example: true
+    Sensitivity:
+      type: string
+      description: Non-NDA or NDA
+      example: Non-NDA
+      enum:
+      - Non-NDA
+      - NDA
+    IsSecure:
+      type: boolean
+      description: Flag/checkbox to indicate Secured deal
+      example: true
+    Region:
+      type: string
+      description: Region of the relationship/Deal
+      example: Europe
+    CountryCode:
+      type: string
+      description: Location where deal is being booked
+      example: UK
+    ZipCode:
+      type: string
+      description: Zip code information
+      example: 1234 AB
+    RMId:
+      type: string
+      description: Unique Id of RM
+      example: 1233445-3333
+    OuterRMId:
+      type: string
+      description: Unique Id for RM provided by the Bank (for integration)
+      example: John@bank.com
+    RMName:
+      type: string
+      description: RM with point of control Deal
+      example: John Doe
+    RMEmail:
+      type: string
+      description: Unique email Id of RM
+      example: John@bank.com
+    CreditRatingType:
+      type: string
+      description: Credit Rating Type (external or internal to Bank)
+      example: Internal
+    CreditRatingCode:
+      type: string
+      description: Risk grade (combination of PD and LGD)
+      example: R11
+    Division:
+      type: string
+      description: Division of bank
+      example: WholeSale
+    BusinessSegment:
+      type: string
+      description: Segment of Business line
+      example: Dept. A
+    BusinessUnit:
+      type: string
+      description: Business Unit of RM
+      example: LPG
+    CapitalClass:
+      type: string
+      description: Capital Classification
+      example: CC-1
+    IndustryCategory:
+      type: string
+      description: Primary Industry of Deal
+      example: Food
+    IndustryCode:
+      type: string
+      description: Industry
+      example: Beer
+    PricingEventType:
+      type: string
+      description: Pricing event type - New, Existing (Imported), Refinance and Repricing
+      example: Existing (Imported)
+      enum:
+      - New
+      - Existing (Imported)
+      - Refinance
+      - Repricing
+    Notes:
+      type: string
+      description: Free-text with ability to include rich text and attach images/documents
+      example: Any text
+    Hurdle:
+      type: number
+      description: Deal Hurdle for RARoC or ROE or Revenue or NIM
+      example: 0.22
+    Target:
+      type: number
+      description: Deal Target for RARoC or ROE or Revenue or NIM
+      example: 0.234
+    ClientAttribute...:
+      type: string
+      description: Client specific attributes.
+      example: Client defined value...
+    UserName:
+      type: string
+      description: User name (used for logon)
+      example: Ron@ClientA.com
+    FullName:
+      type: string
+      description: Full username
+      example: Ron Bakerson
+    Email:
+      type: string
+      description: Email adress
+      example: a@b.com
+    PhoneNumber:
+      type: string
+      description: Phonenumber of entity
+      example: +31623123435
+    Disable:
+      type: boolean
+      description: Flag/checkbox to indicate disabled user
+      example: true
+    portfolioListType:
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/id'
+        Name:
+          $ref: '#/components/schemas/Name'
+        ClientAttribute...:
+          $ref: '#/components/schemas/ClientAttribute...'
+    relationshipListType:
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/id'
+        OuterCustomerId:
+          $ref: '#/components/schemas/OuterCustomerId'
+        Name:
+          $ref: '#/components/schemas/Name'
+        Region:
+          $ref: '#/components/schemas/Region'
+        ClientType:
+          $ref: '#/components/schemas/ClientType'
+        BookingStateLocation:
+          $ref: '#/components/schemas/BookingStateLocation'
+        ClientAttribute...:
+          $ref: '#/components/schemas/ClientAttribute...'
+        portfolio:
+          $ref: '#/components/schemas/portfolioListType'
+    relationshipType:
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/id'
+        OuterCustomerId:
+          $ref: '#/components/schemas/OuterCustomerId'
+        name:
+          $ref: '#/components/schemas/Name'
+        Region:
+          $ref: '#/components/schemas/Region'
+        CountryCode:
+          $ref: '#/components/schemas/CountryCode'
+        BookingStateLocation:
+          $ref: '#/components/schemas/BookingStateLocation'
+        ZipCode:
+          $ref: '#/components/schemas/ZipCode'
+        RMId:
+          $ref: '#/components/schemas/RMId'
+        OuterRMId:
+          $ref: '#/components/schemas/OuterRMId'
+        RMName:
+          $ref: '#/components/schemas/RMName'
+        RMEmail:
+          $ref: '#/components/schemas/RMEmail'
+        CreditRatingType:
+          $ref: '#/components/schemas/CreditRatingType'
+        CreditRatingCode:
+          $ref: '#/components/schemas/CreditRatingCode'
+        Description:
+          $ref: '#/components/schemas/Description'
+        Division:
+          $ref: '#/components/schemas/Division'
+        BusinessSegment:
+          $ref: '#/components/schemas/BusinessSegment'
+        BusinessUnit:
+          $ref: '#/components/schemas/BusinessUnit'
+        CapitalClass:
+          $ref: '#/components/schemas/CapitalClass'
+        IndustryCategory:
+          $ref: '#/components/schemas/IndustryCategory'
+        IndustryCode:
+          $ref: '#/components/schemas/IndustryCode'
+        Status:
+          $ref: '#/components/schemas/Status'
+        PD:
+          $ref: '#/components/schemas/PD'
+        LGD:
+          $ref: '#/components/schemas/LGD'
+        RelationshipExposure:
+          $ref: '#/components/schemas/Exposure'
+        PrimaryContact:
+          $ref: '#/components/schemas/id'
+        UltimateParentId:
+          $ref: '#/components/schemas/id'
+        OuterUltimateParentId:
+          $ref: '#/components/schemas/OuterCustomerId'
+        UltimateParentName:
+          $ref: '#/components/schemas/Name'
+        UltimateParentExposure:
+          $ref: '#/components/schemas/Exposure'
+        CurrencyCode:
+          $ref: '#/components/schemas/CurrencyCode'
+        Hurdle:
+          $ref: '#/components/schemas/Hurdle'
+        Target:
+          $ref: '#/components/schemas/Target'
+        ClientAttribute...:
+          $ref: '#/components/schemas/ClientAttribute...'
+        portfolio:
+          $ref: '#/components/schemas/portfolioListType'
+    dealListType:
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/id'
+        OuterDealId:
+          $ref: '#/components/schemas/OuterDealId'
+        name:
+          $ref: '#/components/schemas/Name'
+        Status:
+          $ref: '#/components/schemas/Status'
+        IsSecure:
+          $ref: '#/components/schemas/IsSecure'
+        Region:
+          $ref: '#/components/schemas/Region'
+        CountryCode:
+          $ref: '#/components/schemas/CountryCode'
+        RMName:
+          $ref: '#/components/schemas/RMName'
+        ClientAttribute...:
+          $ref: '#/components/schemas/ClientAttribute...'
+        relationship:
+          $ref: '#/components/schemas/relationshipListType'
+    dealType:
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/id'
+        OuterDealId:
+          $ref: '#/components/schemas/OuterDealId'
+        name:
+          $ref: '#/components/schemas/Name'
+        Status:
+          $ref: '#/components/schemas/Status'
+        StatusDate:
+          $ref: '#/components/schemas/StatusDate'
+        Syndicated:
+          $ref: '#/components/schemas/Syndicated'
+        Sensitivity:
+          $ref: '#/components/schemas/Sensitivity'
+        IsSecure:
+          $ref: '#/components/schemas/IsSecure'
+        Region:
+          $ref: '#/components/schemas/Region'
+        CountryCode:
+          $ref: '#/components/schemas/CountryCode'
+        BookingStateLocation:
+          $ref: '#/components/schemas/BookingStateLocation'
+        ZipCode:
+          $ref: '#/components/schemas/ZipCode'
+        RMId:
+          $ref: '#/components/schemas/RMId'
+        OuterRMId:
+          $ref: '#/components/schemas/OuterRMId'
+        RMName:
+          $ref: '#/components/schemas/RMName'
+        RMEmail:
+          $ref: '#/components/schemas/RMEmail'
+        CreditRatingType:
+          $ref: '#/components/schemas/CreditRatingType'
+        CreditRatingCode:
+          $ref: '#/components/schemas/CreditRatingCode'
+        Division:
+          $ref: '#/components/schemas/Division'
+        BusinessSegment:
+          $ref: '#/components/schemas/BusinessSegment'
+        BusinessUnit:
+          $ref: '#/components/schemas/BusinessUnit'
+        CapitalClass:
+          $ref: '#/components/schemas/CapitalClass'
+        IndustryCategory:
+          $ref: '#/components/schemas/IndustryCategory'
+        IndustryCode:
+          $ref: '#/components/schemas/IndustryCode'
+        PricingEventType:
+          $ref: '#/components/schemas/PricingEventType'
+        Notes:
+          $ref: '#/components/schemas/Notes'
+        Hurdle:
+          $ref: '#/components/schemas/Hurdle'
+        Target:
+          $ref: '#/components/schemas/Target'
+        ClientAttribute...:
+          $ref: '#/components/schemas/ClientAttribute...'
+        relationship:
+          $ref: '#/components/schemas/relationshipListType'
+    userContextType:
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/id'
+        UserName:
+          $ref: '#/components/schemas/UserName'
+        Disable:
+          $ref: '#/components/schemas/Disable'
+        ClientAttribute...:
+          $ref: '#/components/schemas/ClientAttribute...'
+    userListType:
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/id'
+        UserName:
+          $ref: '#/components/schemas/UserName'
+        FullName:
+          $ref: '#/components/schemas/FullName'
+        Email:
+          $ref: '#/components/schemas/Email'
+        PhoneNumber:
+          $ref: '#/components/schemas/PhoneNumber'
+        ClientAttribute...:
+          $ref: '#/components/schemas/ClientAttribute...'
+    userType:
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/id'
+        UserName:
+          $ref: '#/components/schemas/UserName'
+        FullName:
+          $ref: '#/components/schemas/FullName'
+        Email:
+          $ref: '#/components/schemas/Email'
+        PhoneNumber:
+          $ref: '#/components/schemas/PhoneNumber'
+        Disable:
+          $ref: '#/components/schemas/Disable'
+        ClientAttribute...:
+          $ref: '#/components/schemas/ClientAttribute...'
+    relationshipList:
+      type: object
+      properties:
+        relationships:
+          type: array
+          items:
+            $ref: '#/components/schemas/relationshipListType'
+    relationship:
+      type: object
+      properties:
+        relationship:
+          $ref: '#/components/schemas/relationshipType'
+    dealList:
+      type: object
+      properties:
+        deals:
+          type: array
+          items:
+            $ref: '#/components/schemas/dealListType'
+    deal:
+      type: object
+      properties:
+        deal:
+          $ref: '#/components/schemas/dealType'
+    userContext:
+      type: object
+      properties:
+        user:
+          $ref: '#/components/schemas/userContextType'
+    userList:
+      type: object
+      properties:
+        users:
+          type: array
+          items:
+            $ref: '#/components/schemas/userListType'
+    user:
+      type: object
+      properties:
+        user:
+          $ref: '#/components/schemas/userType'
+    ErrorResponse:
+      type: object
+      properties:
+        errorCode:
+          type: string
+          description: error code
+          example: WSM002
+        errorType:
+          type: string
+          description: type of the issue
+          example: ConnectException
+        errorMessage:
+          type: string
+          description: message
+          example: Connection refused
+        errorData:
+          type: string
+          description: additional information
+          example: Call to system Y timeout [> 30 secs].
+  securitySchemes:
+    BasicAuth:
+      type: http
+      description: Basic Authentication with user and password
+      scheme: basic
+    ApiKeyAuth:
+      type: apiKey
+      name: X-API-Key
+      in: header
