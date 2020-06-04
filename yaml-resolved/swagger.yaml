@@ -705,6 +705,77 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+    delete:
+      tags:
+      - Deal
+      summary: Deletes the deal from the system.
+      operationId: deleteDeal
+      parameters:
+      - name: id
+        in: path
+        description: deal identifier
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: x-system-caller
+        in: header
+        description: Identification of the calling application.
+        required: false
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: x-dpx-actor-id
+        in: header
+        description: Identification of the end-user (DPX internal id).
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "204":
+          description: No content
+        "400":
+          description: Invalid input value
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "401":
+          description: |-
+            Unauthorized, expect this for the following types of errors
+            - BadAuthTicket
+            - ExpiredAuthTicket
+            - InsufficientAuthTicket
+            - InvalidAuthTicket
+            - InvalidUserAuth
+            - RequestIsNotAuthenticated
+            - TamperedAuthTicket
+            - UnauthorizedAccess
+            - UnManagedInvalidSecurityPrincipal
+        "403":
+          description: |-
+            Forbidden, expect this for the following types of errors
+            - AccessDenied
+            - AttributePermissionReadIsMissing
+            - AttributePermissionUpdateIsMissingDuringUpdate
+            - AttributePrivilegeCreateIsMissing
+            - InvalidAccessRights
+        "404":
+          description: Deal-id not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "500":
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
     patch:
       tags:
       - Deal
@@ -864,77 +935,6 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
         "404":
           description: User not found
-        "500":
-          description: Server error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-    delete:
-      tags:
-      - Deal
-      summary: Deletes the deal from the system.
-      operationId: deleteDeal
-      parameters:
-      - name: id
-        in: path
-        description: deal identifier
-        required: true
-        style: simple
-        explode: false
-        schema:
-          type: string
-      - name: x-system-caller
-        in: header
-        description: Identification of the calling application.
-        required: false
-        style: simple
-        explode: false
-        schema:
-          type: string
-      - name: x-dpx-actor-id
-        in: header
-        description: Identification of the end-user (DPX internal id).
-        required: true
-        style: simple
-        explode: false
-        schema:
-          type: string
-      responses:
-        "204":
-          description: No content
-        "400":
-          description: Invalid input value
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        "401":
-          description: |-
-            Unauthorized, expect this for the following types of errors
-            - BadAuthTicket
-            - ExpiredAuthTicket
-            - InsufficientAuthTicket
-            - InvalidAuthTicket
-            - InvalidUserAuth
-            - RequestIsNotAuthenticated
-            - TamperedAuthTicket
-            - UnauthorizedAccess
-            - UnManagedInvalidSecurityPrincipal
-        "403":
-          description: |-
-            Forbidden, expect this for the following types of errors
-            - AccessDenied
-            - AttributePermissionReadIsMissing
-            - AttributePermissionUpdateIsMissingDuringUpdate
-            - AttributePrivilegeCreateIsMissing
-            - InvalidAccessRights
-        "404":
-          description: Deal-id not found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
         "500":
           description: Server error
           content:
