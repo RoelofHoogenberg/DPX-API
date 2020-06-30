@@ -460,7 +460,7 @@ paths:
       - Relationship
       summary: Retrieves Relationship profitability. If required, (Re)Calculate Relationship
         profitability
-      operationId: getRelationshipCalculation
+      operationId: getRelationshipProfitability
       parameters:
       - name: id
         in: path
@@ -976,7 +976,7 @@ paths:
       tags:
       - Deal
       summary: Retrieves Deal profitability. If required, (Re)Calculate Deal profitability
-      operationId: getDealCalculation
+      operationId: getDealProfitability
       parameters:
       - name: id
         in: path
@@ -1049,6 +1049,471 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+        "500":
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /deal/{id}/workflow:
+    get:
+      tags:
+      - Deal
+      summary: Overview of deal states and dealState workflow (deal creation, Draft,
+        etc.)
+      operationId: getDealWorkflow
+      parameters:
+      - name: id
+        in: path
+        description: deal identifier
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: x-system-caller
+        in: header
+        description: Identification of the calling application.
+        required: false
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: x-dpx-actor-id
+        in: header
+        description: Identification of the end-user.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Deal approval workflow (overview and current status)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/dealWorkflow'
+        "400":
+          description: Invalid input value
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "401":
+          description: |-
+            Unauthorized, expect this for the following types of errors
+            - BadAuthTicket
+            - ExpiredAuthTicket
+            - InsufficientAuthTicket
+            - InvalidAuthTicket
+            - InvalidUserAuth
+            - RequestIsNotAuthenticated
+            - TamperedAuthTicket
+            - UnauthorizedAccess
+            - UnManagedInvalidSecurityPrincipal
+        "403":
+          description: |-
+            Forbidden, expect this for the following types of errors
+            - AccessDenied
+            - AttributePermissionReadIsMissing
+            - AttributePermissionUpdateIsMissingDuringUpdate
+            - AttributePrivilegeCreateIsMissing
+            - InvalidAccessRights'
+        "404":
+          description: deal-id not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "500":
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /deal/{id}/approval/workflow:
+    get:
+      tags:
+      - Deal
+      summary: 'Overview of Approval levels (AWF), their states, the approver groups
+        per level. Fore each approver group the selected approvers and their approve
+        state is returnd. '
+      operationId: getApprovalWorkflow
+      parameters:
+      - name: id
+        in: path
+        description: deal identifier
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: x-system-caller
+        in: header
+        description: Identification of the calling application.
+        required: false
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: x-dpx-actor-id
+        in: header
+        description: Identification of the end-user.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Deal approval workflow (overview and current status)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/approvalDetails'
+        "400":
+          description: Invalid input value
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "401":
+          description: |-
+            Unauthorized, expect this for the following types of errors
+            - BadAuthTicket
+            - ExpiredAuthTicket
+            - InsufficientAuthTicket
+            - InvalidAuthTicket
+            - InvalidUserAuth
+            - RequestIsNotAuthenticated
+            - TamperedAuthTicket
+            - UnauthorizedAccess
+            - UnManagedInvalidSecurityPrincipal
+        "403":
+          description: |-
+            Forbidden, expect this for the following types of errors
+            - AccessDenied
+            - AttributePermissionReadIsMissing
+            - AttributePermissionUpdateIsMissingDuringUpdate
+            - AttributePrivilegeCreateIsMissing
+            - InvalidAccessRights'
+        "404":
+          description: deal-id not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "500":
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    post:
+      tags:
+      - Deal
+      summary: Approval setup per level and approval groups a list of approvers
+      operationId: approvalSetup
+      parameters:
+      - name: id
+        in: path
+        description: deal identifier
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: x-system-caller
+        in: header
+        description: Identification of the calling application.
+        required: false
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: x-dpx-actor-id
+        in: header
+        description: Identification of the end-user (DPX internal id).
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/approvalSetup'
+        required: true
+      responses:
+        "201":
+          description: Deal id (key)
+          headers:
+            EntityId:
+              $ref: '#/components/schemas/EntityId'
+        "400":
+          description: Invalid input value
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "401":
+          description: |-
+            Unauthorized, expect this for the following types of errors
+            - BadAuthTicket
+            - ExpiredAuthTicket
+            - InsufficientAuthTicket
+            - InvalidAuthTicket
+            - InvalidUserAuth
+            - RequestIsNotAuthenticated
+            - TamperedAuthTicket
+            - UnauthorizedAccess
+            - UnManagedInvalidSecurityPrincipal
+        "403":
+          description: |-
+            Forbidden, expect this for the following types of errors
+            - AccessDenied
+            - AttributePermissionReadIsMissing
+            - AttributePermissionUpdateIsMissingDuringUpdate
+            - AttributePrivilegeCreateIsMissing
+            - InvalidAccessRights
+        "500":
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /deal/{deal-id}/approval/approvalgroup/{approval-group-id}/approvers:
+    get:
+      tags:
+      - Deal
+      summary: 'list of potential approvers for the deal and approval-group at hand. '
+      operationId: getApproversList
+      parameters:
+      - name: deal-id
+        in: path
+        description: deal identifier
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: approval-group-id
+        in: path
+        description: approval group identifier
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: x-system-caller
+        in: header
+        description: Identification of the calling application.
+        required: false
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: x-dpx-actor-id
+        in: header
+        description: Identification of the end-user.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Deal approval workflow (overview and current status)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/approversList'
+        "400":
+          description: Invalid input value
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "401":
+          description: |-
+            Unauthorized, expect this for the following types of errors
+            - BadAuthTicket
+            - ExpiredAuthTicket
+            - InsufficientAuthTicket
+            - InvalidAuthTicket
+            - InvalidUserAuth
+            - RequestIsNotAuthenticated
+            - TamperedAuthTicket
+            - UnauthorizedAccess
+            - UnManagedInvalidSecurityPrincipal
+        "403":
+          description: |-
+            Forbidden, expect this for the following types of errors
+            - AccessDenied
+            - AttributePermissionReadIsMissing
+            - AttributePermissionUpdateIsMissingDuringUpdate
+            - AttributePrivilegeCreateIsMissing
+            - InvalidAccessRights'
+        "404":
+          description: deal-id not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "500":
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /deal/{id}/action:
+    post:
+      tags:
+      - Deal
+      summary: Performs action to set dealState to new value. Activated by DRAFT,
+        NPW, etc. buttons
+      operationId: postDealAction
+      parameters:
+      - name: id
+        in: path
+        description: deal identifier
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: x-system-caller
+        in: header
+        description: Identification of the calling application.
+        required: false
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: x-dpx-actor-id
+        in: header
+        description: Identification of the end-user (DPX internal id).
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/dealAction'
+        required: true
+      responses:
+        "201":
+          description: Deal id (key)
+          headers:
+            EntityId:
+              $ref: '#/components/schemas/EntityId'
+        "400":
+          description: Invalid input value
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "401":
+          description: |-
+            Unauthorized, expect this for the following types of errors
+            - BadAuthTicket
+            - ExpiredAuthTicket
+            - InsufficientAuthTicket
+            - InvalidAuthTicket
+            - InvalidUserAuth
+            - RequestIsNotAuthenticated
+            - TamperedAuthTicket
+            - UnauthorizedAccess
+            - UnManagedInvalidSecurityPrincipal
+        "403":
+          description: |-
+            Forbidden, expect this for the following types of errors
+            - AccessDenied
+            - AttributePermissionReadIsMissing
+            - AttributePermissionUpdateIsMissingDuringUpdate
+            - AttributePrivilegeCreateIsMissing
+            - InvalidAccessRights
+        "500":
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /deal/{id}/approval/action:
+    post:
+      tags:
+      - Deal
+      summary: Performs action to set levelApprovalState to new value. Only used for
+        power users.
+      operationId: postApprovalAction
+      parameters:
+      - name: id
+        in: path
+        description: deal identifier
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: x-system-caller
+        in: header
+        description: Identification of the calling application.
+        required: false
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: x-dpx-actor-id
+        in: header
+        description: Identification of the end-user (DPX internal id).
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/approvalLevelAction'
+        required: true
+      responses:
+        "201":
+          description: Deal id (key)
+          headers:
+            EntityId:
+              $ref: '#/components/schemas/EntityId'
+        "400":
+          description: Invalid input value
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "401":
+          description: |-
+            Unauthorized, expect this for the following types of errors
+            - BadAuthTicket
+            - ExpiredAuthTicket
+            - InsufficientAuthTicket
+            - InvalidAuthTicket
+            - InvalidUserAuth
+            - RequestIsNotAuthenticated
+            - TamperedAuthTicket
+            - UnauthorizedAccess
+            - UnManagedInvalidSecurityPrincipal
+        "403":
+          description: |-
+            Forbidden, expect this for the following types of errors
+            - AccessDenied
+            - AttributePermissionReadIsMissing
+            - AttributePermissionUpdateIsMissingDuringUpdate
+            - AttributePrivilegeCreateIsMissing
+            - InvalidAccessRights
         "500":
           description: Server error
           content:
@@ -1488,10 +1953,10 @@ paths:
   /scenario/{id}/profitability:
     get:
       tags:
-      - Deal
+      - Scenario
       summary: Retrieves Scenario profitability. If required, (Re)Calculate Scenario
         profitability
-      operationId: getScenarioCalculation
+      operationId: getScenarioProfitability
       parameters:
       - name: id
         in: path
@@ -2012,10 +2477,10 @@ paths:
   /counterparty/{id}/profitability:
     get:
       tags:
-      - Deal
+      - Counterparty
       summary: Retrieves Counterparty profitability. If required, (Re)Calculate Counterparty
         profitability
-      operationId: getCounterpartyCalculation
+      operationId: getCounterpartyProfitability
       parameters:
       - name: id
         in: path
@@ -2554,7 +3019,7 @@ paths:
       - Product
       summary: Retrieves Product profitability. If required, (Re)Calculate Product
         profitability
-      operationId: getProductCalculation
+      operationId: getProductProfitability
       parameters:
       - name: id
         in: path
@@ -2787,7 +3252,7 @@ paths:
         explode: true
         schema:
           type: string
-          default: UserName
+          default: Username
       - name: x-system-caller
         in: header
         description: Identification of the calling application.
@@ -3146,9 +3611,203 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+  /user/{id}/approval:
+    get:
+      tags:
+      - User
+      summary: list of [open] deal approvals requests, filter on state is possible
+      operationId: getUserApprovalList
+      parameters:
+      - name: id
+        in: path
+        description: user identifier
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: status
+        in: query
+        description: 'Status of the approval [todo: conver to enum]'
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: offset
+        in: query
+        description: The number of items to skip before starting to collect the result
+          set.
+        required: false
+        style: form
+        explode: true
+        schema:
+          minimum: 0
+          type: integer
+          default: 0
+      - name: limit
+        in: query
+        description: The number of items to return.
+        required: false
+        style: form
+        explode: true
+        schema:
+          maximum: 100
+          minimum: 1
+          type: integer
+          default: 20
+      - name: sort
+        in: query
+        description: sorting order of the result set
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+          default: date submitted
+      - name: x-system-caller
+        in: header
+        description: Identification of the calling application.
+        required: false
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: x-dpx-actor-id
+        in: header
+        description: Identification of the end-user (DPX internal id).
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Overview of users
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/userApprovalList'
+        "400":
+          description: Invalid input value
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "401":
+          description: |-
+            Unauthorized, expect this for the following types of errors
+            - BadAuthTicket
+            - ExpiredAuthTicket
+            - InsufficientAuthTicket
+            - InvalidAuthTicket
+            - InvalidUserAuth
+            - RequestIsNotAuthenticated
+            - TamperedAuthTicket
+            - UnauthorizedAccess
+            - UnManagedInvalidSecurityPrincipal
+        "403":
+          description: |-
+            Forbidden, expect this for the following types of errors
+            - AccessDenied
+            - AttributePermissionReadIsMissing
+            - AttributePermissionUpdateIsMissingDuringUpdate
+            - AttributePrivilegeCreateIsMissing
+            - InvalidAccessRights
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "500":
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    post:
+      tags:
+      - User
+      summary: 'Performs user action to set UserApprovalState to new state like approved,
+        supported, or declined. '
+      operationId: postUserApproval
+      parameters:
+      - name: id
+        in: path
+        description: user identifier
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: x-system-caller
+        in: header
+        description: Identification of the calling application.
+        required: false
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: x-dpx-actor-id
+        in: header
+        description: Identification of the end-user (DPX internal id).
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/approvalUserAction'
+        required: true
+      responses:
+        "201":
+          description: user id (key)
+          headers:
+            EntityId:
+              $ref: '#/components/schemas/EntityId'
+        "400":
+          description: Invalid input value
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "401":
+          description: |-
+            Unauthorized, expect this for the following types of errors
+            - BadAuthTicket
+            - ExpiredAuthTicket
+            - InsufficientAuthTicket
+            - InvalidAuthTicket
+            - InvalidUserAuth
+            - RequestIsNotAuthenticated
+            - TamperedAuthTicket
+            - UnauthorizedAccess
+            - UnManagedInvalidSecurityPrincipal
+        "403":
+          description: |-
+            Forbidden, expect this for the following types of errors
+            - AccessDenied
+            - AttributePermissionReadIsMissing
+            - AttributePermissionUpdateIsMissingDuringUpdate
+            - AttributePrivilegeCreateIsMissing
+            - InvalidAccessRights
+        "404":
+          description: User-id not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "500":
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
 components:
   schemas:
-    Code:
+    code:
       type: string
       description: Code of the item
       example: CodeX
@@ -3193,13 +3852,17 @@ components:
       type: number
       description: Exposure of the Enity
       example: 1234533.22
-    Name:
+    name:
       type: string
-      description: Name of entity
-      example: EntityName
+      description: name of entity
+      example: Readable name
     Description:
       type: string
       description: Description of entity
+      example: '....'
+    Comment:
+      type: string
+      description: Comments added to appoval request, notes or approval.
       example: '....'
     LGDCode:
       type: string
@@ -3213,9 +3876,18 @@ components:
       type: string
       description: Status of the object (Code)
       example: OPN
+    ActionCode:
+      type: string
+      description: State transition identifier
+      example: NPW
+    ReasonCode:
+      type: string
+      description: Reason for state change
+      example: "01"
     StatusDate:
       type: string
       description: Deal Status Date (generated by DPX)
+      format: date-time
       example: 2017-07-21T17:32:28Z
     Syndicated:
       type: boolean
@@ -3253,7 +3925,7 @@ components:
       type: string
       description: Unique Id for RM provided by the Bank (for integration)
       example: John@bank.com
-    RMName:
+    RMname:
       type: string
       description: RM with point of control Deal
       example: John Doe
@@ -3322,11 +3994,11 @@ components:
       type: string
       description: Client specific attributes.
       example: Client defined value...
-    UserName:
+    Username:
       type: string
       description: User name (used for logon)
       example: Ron@ClientA.com
-    FullName:
+    Fullname:
       type: string
       description: Full username
       example: Ron Bakerson
@@ -3338,7 +4010,7 @@ components:
       type: string
       description: Phonenumber of entity
       example: +31623123435
-    Disable:
+    Disabled:
       type: boolean
       description: Flag/checkbox to indicate disabled user
       example: true
@@ -3349,10 +4021,12 @@ components:
     StartDate:
       type: string
       description: current or future start date of product
+      format: date
       example: 2021-11-04
     MaturityDate:
       type: string
       description: Maturity date of product i.e. startdate+term
+      format: date
       example: 2027-11-04
     Limit:
       type: number
@@ -3623,6 +4297,7 @@ components:
     DateCreated:
       type: string
       description: Date the enity was created.
+      format: date-time
       example: 2020-06-18T17:32:28Z
     CreatedBy:
       type: string
@@ -3631,6 +4306,7 @@ components:
     LastUpdated:
       type: string
       description: Date the enity was last updated.
+      format: date-time
       example: 2020-06-21T01:32:28Z
     UpdatedBy:
       type: string
@@ -3639,6 +4315,7 @@ components:
     DateLastPriced:
       type: string
       description: Date the price of enity was last updated.
+      format: date-time
       example: 2020-06-21T01:31:40Z
     LastPricedBy:
       type: string
@@ -3647,10 +4324,10 @@ components:
     CodedType:
       type: object
       properties:
-        Code:
-          $ref: '#/components/schemas/Code'
-        Name:
-          $ref: '#/components/schemas/Name'
+        code:
+          $ref: '#/components/schemas/code'
+        name:
+          $ref: '#/components/schemas/name'
     TechnicalFieldsType:
       type: object
       properties:
@@ -3677,8 +4354,8 @@ components:
       properties:
         id:
           $ref: '#/components/schemas/id'
-        Name:
-          $ref: '#/components/schemas/Name'
+        name:
+          $ref: '#/components/schemas/name'
         ClientAttribute...:
           $ref: '#/components/schemas/ClientAttribute...'
     portfolioListUpdateType:
@@ -3693,8 +4370,8 @@ components:
           $ref: '#/components/schemas/id'
         OuterCustomerId:
           $ref: '#/components/schemas/OuterCustomerId'
-        Name:
-          $ref: '#/components/schemas/Name'
+        name:
+          $ref: '#/components/schemas/name'
         Region:
           $ref: '#/components/schemas/CodedType'
         ClientType:
@@ -3718,7 +4395,7 @@ components:
         OuterCustomerId:
           $ref: '#/components/schemas/OuterCustomerId'
         name:
-          $ref: '#/components/schemas/Name'
+          $ref: '#/components/schemas/name'
         Region:
           $ref: '#/components/schemas/RegionCode'
         Country:
@@ -3731,8 +4408,8 @@ components:
           $ref: '#/components/schemas/RMId'
         OuterRMId:
           $ref: '#/components/schemas/OuterRMId'
-        RMName:
-          $ref: '#/components/schemas/RMName'
+        RMname:
+          $ref: '#/components/schemas/RMname'
         RMEmail:
           $ref: '#/components/schemas/RMEmail'
         CreditRatingType:
@@ -3767,8 +4444,8 @@ components:
           $ref: '#/components/schemas/id'
         OuterUltimateParentId:
           $ref: '#/components/schemas/OuterCustomerId'
-        UltimateParentName:
-          $ref: '#/components/schemas/Name'
+        UltimateParentname:
+          $ref: '#/components/schemas/name'
         UltimateParentExposure:
           $ref: '#/components/schemas/Exposure'
         CurrencyCode:
@@ -3789,7 +4466,7 @@ components:
         OuterCustomerId:
           $ref: '#/components/schemas/OuterCustomerId'
         name:
-          $ref: '#/components/schemas/Name'
+          $ref: '#/components/schemas/name'
         Region:
           $ref: '#/components/schemas/CodedType'
         CountryCode:
@@ -3802,8 +4479,8 @@ components:
           $ref: '#/components/schemas/RMId'
         OuterRMId:
           $ref: '#/components/schemas/OuterRMId'
-        RMName:
-          $ref: '#/components/schemas/RMName'
+        RMname:
+          $ref: '#/components/schemas/RMname'
         RMEmail:
           $ref: '#/components/schemas/RMEmail'
         CreditRatingType:
@@ -3838,8 +4515,8 @@ components:
           $ref: '#/components/schemas/id'
         OuterUltimateParentId:
           $ref: '#/components/schemas/OuterCustomerId'
-        UltimateParentName:
-          $ref: '#/components/schemas/Name'
+        UltimateParentname:
+          $ref: '#/components/schemas/name'
         UltimateParentExposure:
           $ref: '#/components/schemas/Exposure'
         Currency:
@@ -3873,17 +4550,19 @@ components:
         OuterDealId:
           $ref: '#/components/schemas/OuterDealId'
         name:
-          $ref: '#/components/schemas/Name'
+          $ref: '#/components/schemas/name'
         Status:
           $ref: '#/components/schemas/CodedType'
+        StatusDate:
+          $ref: '#/components/schemas/StatusDate'
         IsSecure:
           $ref: '#/components/schemas/IsSecure'
         Region:
           $ref: '#/components/schemas/CodedType'
         Country:
           $ref: '#/components/schemas/CodedType'
-        RMName:
-          $ref: '#/components/schemas/RMName'
+        RMname:
+          $ref: '#/components/schemas/RMname'
         ClientAttribute...:
           $ref: '#/components/schemas/ClientAttribute...'
         relationship:
@@ -3901,7 +4580,7 @@ components:
         OuterDealId:
           $ref: '#/components/schemas/OuterDealId'
         name:
-          $ref: '#/components/schemas/Name'
+          $ref: '#/components/schemas/name'
         Status:
           $ref: '#/components/schemas/CodedType'
         StatusDate:
@@ -3924,8 +4603,8 @@ components:
           $ref: '#/components/schemas/RMId'
         OuterRMId:
           $ref: '#/components/schemas/OuterRMId'
-        RMName:
-          $ref: '#/components/schemas/RMName'
+        RMname:
+          $ref: '#/components/schemas/RMname'
         RMEmail:
           $ref: '#/components/schemas/RMEmail'
         CreditRatingType:
@@ -3968,7 +4647,7 @@ components:
         OuterDealId:
           $ref: '#/components/schemas/OuterDealId'
         name:
-          $ref: '#/components/schemas/Name'
+          $ref: '#/components/schemas/name'
         Status:
           $ref: '#/components/schemas/StatusCode'
         StatusDate:
@@ -3991,8 +4670,8 @@ components:
           $ref: '#/components/schemas/RMId'
         OuterRMId:
           $ref: '#/components/schemas/OuterRMId'
-        RMName:
-          $ref: '#/components/schemas/RMName'
+        RMname:
+          $ref: '#/components/schemas/RMname'
         RMEmail:
           $ref: '#/components/schemas/RMEmail'
         CreditRatingType:
@@ -4034,6 +4713,116 @@ components:
           $ref: '#/components/schemas/RegulatoryCapitalType'
         TechnicalFields:
           $ref: '#/components/schemas/TechnicalFieldsType'
+    dealWorkflowType:
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/id'
+        parentId:
+          $ref: '#/components/schemas/id'
+        name:
+          $ref: '#/components/schemas/name'
+        Status:
+          $ref: '#/components/schemas/CodedType'
+        ClientAttribute...:
+          $ref: '#/components/schemas/ClientAttribute...'
+    approver-type:
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/id'
+        username:
+          $ref: '#/components/schemas/Username'
+        fullname:
+          $ref: '#/components/schemas/Fullname'
+        email:
+          $ref: '#/components/schemas/Email'
+        status:
+          $ref: '#/components/schemas/CodedType'
+        approvedDate:
+          $ref: '#/components/schemas/LastUpdated'
+        actionHistoryId:
+          $ref: '#/components/schemas/id'
+    approvalGroupType:
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/id'
+        name:
+          $ref: '#/components/schemas/name'
+        Status:
+          $ref: '#/components/schemas/CodedType'
+        actions-allowed:
+          type: array
+          items:
+            $ref: '#/components/schemas/CodedType'
+        approved-date:
+          $ref: '#/components/schemas/LastUpdated'
+        approvers:
+          type: array
+          description: Contains a list of approvers. If the approvel is in state Draft,
+            this list is empty and the potential approvers may be usiung the /deal/{id}/approval/approval-group/{id}/approvers
+            resource.
+          items:
+            $ref: '#/components/schemas/approver-type'
+    approvalLevelType:
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/id'
+        parentId:
+          $ref: '#/components/schemas/id'
+        name:
+          $ref: '#/components/schemas/name'
+        Status:
+          $ref: '#/components/schemas/CodedType'
+        actions-allowed:
+          type: array
+          items:
+            $ref: '#/components/schemas/CodedType'
+        approvalGroups:
+          type: array
+          items:
+            $ref: '#/components/schemas/approvalGroupType'
+        ClientAttribute...:
+          $ref: '#/components/schemas/ClientAttribute...'
+    approval-group-setup-type:
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/id'
+        approvers:
+          type: array
+          description: Contains a list of approvers.
+          items:
+            $ref: '#/components/schemas/id'
+    approval-setup-type:
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/id'
+        approvalGroups:
+          type: array
+          items:
+            $ref: '#/components/schemas/approval-group-setup-type'
+    deal-action-type:
+      type: object
+      properties:
+        action-id:
+          $ref: '#/components/schemas/ActionCode'
+        reason-code:
+          $ref: '#/components/schemas/ReasonCode'
+        comment:
+          $ref: '#/components/schemas/Comment'
+    approval-level-action-type:
+      type: object
+      properties:
+        action-id:
+          $ref: '#/components/schemas/ActionCode'
+        reason-code:
+          $ref: '#/components/schemas/ReasonCode'
+        comment:
+          $ref: '#/components/schemas/Comment'
     scenarioListType:
       type: object
       properties:
@@ -4042,7 +4831,7 @@ components:
         OuterScenarioId:
           $ref: '#/components/schemas/OuterScenarioId'
         name:
-          $ref: '#/components/schemas/Name'
+          $ref: '#/components/schemas/name'
         Status:
           $ref: '#/components/schemas/CodedType'
         ClientAttribute...:
@@ -4062,7 +4851,7 @@ components:
         OuterScenarioId:
           $ref: '#/components/schemas/OuterScenarioId'
         name:
-          $ref: '#/components/schemas/Name'
+          $ref: '#/components/schemas/name'
         Status:
           $ref: '#/components/schemas/CodedType'
         StatusDate:
@@ -4081,7 +4870,7 @@ components:
         OuterScenarioId:
           $ref: '#/components/schemas/OuterScenarioId'
         name:
-          $ref: '#/components/schemas/Name'
+          $ref: '#/components/schemas/name'
         Status:
           $ref: '#/components/schemas/StatusCode'
         StatusDate:
@@ -4108,8 +4897,8 @@ components:
           $ref: '#/components/schemas/id'
         OuterCustomerId:
           $ref: '#/components/schemas/OuterCustomerId'
-        Name:
-          $ref: '#/components/schemas/Name'
+        name:
+          $ref: '#/components/schemas/name'
         Region:
           $ref: '#/components/schemas/CodedType'
         ClientType:
@@ -4135,7 +4924,7 @@ components:
         OuterCustomerId:
           $ref: '#/components/schemas/OuterCustomerId'
         name:
-          $ref: '#/components/schemas/Name'
+          $ref: '#/components/schemas/name'
         Region:
           $ref: '#/components/schemas/RegionCode'
         Country:
@@ -4148,8 +4937,8 @@ components:
           $ref: '#/components/schemas/RMId'
         OuterRMId:
           $ref: '#/components/schemas/OuterRMId'
-        RMName:
-          $ref: '#/components/schemas/RMName'
+        RMname:
+          $ref: '#/components/schemas/RMname'
         RMEmail:
           $ref: '#/components/schemas/RMEmail'
         CreditRatingType:
@@ -4184,8 +4973,8 @@ components:
           $ref: '#/components/schemas/id'
         OuterUltimateParentId:
           $ref: '#/components/schemas/OuterCustomerId'
-        UltimateParentName:
-          $ref: '#/components/schemas/Name'
+        UltimateParentname:
+          $ref: '#/components/schemas/name'
         UltimateParentExposure:
           $ref: '#/components/schemas/Exposure'
         CurrencyCode:
@@ -4208,7 +4997,7 @@ components:
         OuterCustomerId:
           $ref: '#/components/schemas/OuterCustomerId'
         name:
-          $ref: '#/components/schemas/Name'
+          $ref: '#/components/schemas/name'
         Region:
           $ref: '#/components/schemas/CodedType'
         CountryCode:
@@ -4221,8 +5010,8 @@ components:
           $ref: '#/components/schemas/RMId'
         OuterRMId:
           $ref: '#/components/schemas/OuterRMId'
-        RMName:
-          $ref: '#/components/schemas/RMName'
+        RMname:
+          $ref: '#/components/schemas/RMname'
         RMEmail:
           $ref: '#/components/schemas/RMEmail'
         CreditRatingType:
@@ -4257,8 +5046,8 @@ components:
           $ref: '#/components/schemas/id'
         OuterUltimateParentId:
           $ref: '#/components/schemas/OuterCustomerId'
-        UltimateParentName:
-          $ref: '#/components/schemas/Name'
+        UltimateParentname:
+          $ref: '#/components/schemas/name'
         UltimateParentExposure:
           $ref: '#/components/schemas/Exposure'
         Currency:
@@ -4293,8 +5082,8 @@ components:
           $ref: '#/components/schemas/id'
         OuterCustomerId:
           $ref: '#/components/schemas/OuterCustomerId'
-        Name:
-          $ref: '#/components/schemas/Name'
+        name:
+          $ref: '#/components/schemas/name'
         Region:
           $ref: '#/components/schemas/CodedType'
         ClientAttribute...:
@@ -4318,7 +5107,7 @@ components:
         OuterProductId:
           $ref: '#/components/schemas/OuterProductId'
         name:
-          $ref: '#/components/schemas/Name'
+          $ref: '#/components/schemas/name'
         ProductClass:
           $ref: '#/components/schemas/ProductClassCode'
         ProductCategory:
@@ -4403,7 +5192,7 @@ components:
         OuterProductId:
           $ref: '#/components/schemas/OuterProductId'
         name:
-          $ref: '#/components/schemas/Name'
+          $ref: '#/components/schemas/name'
         ProductClass:
           $ref: '#/components/schemas/CodedType'
         ProductCategory:
@@ -4498,10 +5287,10 @@ components:
       properties:
         id:
           $ref: '#/components/schemas/id'
-        UserName:
-          $ref: '#/components/schemas/UserName'
-        Disable:
-          $ref: '#/components/schemas/Disable'
+        Username:
+          $ref: '#/components/schemas/Username'
+        Disabled:
+          $ref: '#/components/schemas/Disabled'
         ClientAttribute...:
           $ref: '#/components/schemas/ClientAttribute...'
     userListType:
@@ -4509,10 +5298,10 @@ components:
       properties:
         id:
           $ref: '#/components/schemas/id'
-        UserName:
-          $ref: '#/components/schemas/UserName'
-        FullName:
-          $ref: '#/components/schemas/FullName'
+        Username:
+          $ref: '#/components/schemas/Username'
+        Fullname:
+          $ref: '#/components/schemas/Fullname'
         Email:
           $ref: '#/components/schemas/Email'
         PhoneNumber:
@@ -4524,18 +5313,40 @@ components:
       properties:
         id:
           $ref: '#/components/schemas/id'
-        UserName:
-          $ref: '#/components/schemas/UserName'
-        FullName:
-          $ref: '#/components/schemas/FullName'
+        Username:
+          $ref: '#/components/schemas/Username'
+        Fullname:
+          $ref: '#/components/schemas/Fullname'
         Email:
           $ref: '#/components/schemas/Email'
         PhoneNumber:
           $ref: '#/components/schemas/PhoneNumber'
-        Disable:
-          $ref: '#/components/schemas/Disable'
+        Disabled:
+          $ref: '#/components/schemas/Disabled'
         ClientAttribute...:
           $ref: '#/components/schemas/ClientAttribute...'
+    userApprovalListType:
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/id'
+        submittedBy:
+          $ref: '#/components/schemas/name'
+        Status:
+          $ref: '#/components/schemas/CodedType'
+        deal:
+          $ref: '#/components/schemas/dealListType'
+    approval-user-action-type:
+      type: object
+      properties:
+        approval-group-id:
+          $ref: '#/components/schemas/id'
+        action-id:
+          $ref: '#/components/schemas/ActionCode'
+        reason-code:
+          $ref: '#/components/schemas/ReasonCode'
+        comment:
+          $ref: '#/components/schemas/Comment'
     relationshipList:
       type: object
       properties:
@@ -4582,6 +5393,50 @@ components:
           $ref: '#/components/schemas/dealProfitabilityType'
         TechnicalFields:
           $ref: '#/components/schemas/TechnicalFieldsType'
+    dealWorkflow:
+      type: object
+      properties:
+        dealWorkflow:
+          type: array
+          items:
+            $ref: '#/components/schemas/dealWorkflowType'
+    approvalDetails:
+      type: object
+      properties:
+        approvalLevel:
+          type: array
+          items:
+            $ref: '#/components/schemas/approvalLevelType'
+        ClientAttribute...:
+          $ref: '#/components/schemas/ClientAttribute...'
+    approversList:
+      type: object
+      properties:
+        approvers:
+          type: array
+          items:
+            $ref: '#/components/schemas/userType'
+        ClientAttribute...:
+          $ref: '#/components/schemas/ClientAttribute...'
+    approvalSetup:
+      type: object
+      properties:
+        approvalLevel:
+          type: array
+          items:
+            $ref: '#/components/schemas/approval-setup-type'
+        comment:
+          $ref: '#/components/schemas/Comment'
+    dealAction:
+      type: object
+      properties:
+        dealAction:
+          $ref: '#/components/schemas/deal-action-type'
+    approvalLevelAction:
+      type: object
+      properties:
+        approvalLevelAction:
+          $ref: '#/components/schemas/approval-level-action-type'
     scenarioList:
       type: object
       properties:
@@ -4665,6 +5520,18 @@ components:
       properties:
         user:
           $ref: '#/components/schemas/userType'
+    userApprovalList:
+      type: object
+      properties:
+        approvals:
+          type: array
+          items:
+            $ref: '#/components/schemas/userApprovalListType'
+    approvalUserAction:
+      type: object
+      properties:
+        approvalLevelAction:
+          $ref: '#/components/schemas/approval-user-action-type'
     ErrorResponse:
       type: object
       properties:
