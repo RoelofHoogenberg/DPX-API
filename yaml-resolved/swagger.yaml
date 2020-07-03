@@ -4,7 +4,7 @@ info:
   description: Public API allowing access to DealPoint.
   contact:
     name: Roelof Hoogenberg
-    email: roelof@bxfin.com
+    email: Roelof@bxfin.com
   version: 0.1.0
 servers:
 - url: https://api.bxfin.com/api/v0.1
@@ -22,7 +22,7 @@ paths:
       summary: Retrieve all relationships the actor is allowed to view in DealPoint
       operationId: getRelationships
       parameters:
-      - name: relationship_id
+      - name: relationshipId
         in: query
         description: relationship identifier
         required: false
@@ -30,7 +30,7 @@ paths:
         explode: true
         schema:
           type: string
-      - name: outer_customer_id
+      - name: outerCustomerId
         in: query
         description: Customer id as externally known
         required: false
@@ -38,7 +38,7 @@ paths:
         explode: true
         schema:
           type: string
-      - name: relationship_name
+      - name: relationshipName
         in: query
         description: (part of the) name of the relationship (client)
         required: false
@@ -84,7 +84,7 @@ paths:
         explode: true
         schema:
           type: string
-          default: OuterRelationshipId
+          default: outerRelationshipId
       - name: x-system-caller
         in: header
         description: Identification of the calling application.
@@ -113,7 +113,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/errorResponse'
         "401":
           description: |-
             Unauthorized, expect this for the following types of errors
@@ -137,13 +137,13 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/errorResponse'
         "500":
           description: Server error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/errorResponse'
     post:
       tags:
       - Relationship
@@ -184,14 +184,14 @@ paths:
         "201":
           description: relationship id (key)
           headers:
-            EntityId:
-              $ref: '#/components/schemas/EntityId'
+            entityId:
+              $ref: '#/components/schemas/entityId'
         "400":
           description: Invalid input value
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/errorResponse'
         "401":
           description: |-
             Unauthorized, expect this for the following types of errors
@@ -217,7 +217,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/errorResponse'
   /relationship/{id}:
     get:
       tags:
@@ -262,7 +262,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/errorResponse'
         "401":
           description: |-
             Unauthorized, expect this for the following types of errors
@@ -288,13 +288,13 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/errorResponse'
         "500":
           description: Server error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/errorResponse'
     delete:
       tags:
       - Relationship
@@ -333,7 +333,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/errorResponse'
         "401":
           description: |-
             Unauthorized, expect this for the following types of errors
@@ -359,13 +359,13 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/errorResponse'
         "500":
           description: Server error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/errorResponse'
     patch:
       tags:
       - Relationship
@@ -414,14 +414,14 @@ paths:
         "204":
           description: relationship id (key)
           headers:
-            EntityId:
-              $ref: '#/components/schemas/EntityId'
+            entityId:
+              $ref: '#/components/schemas/entityId'
         "400":
           description: Invalid input value
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/errorResponse'
         "401":
           description: |-
             Unauthorized, expect this for the following types of errors
@@ -447,13 +447,13 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/errorResponse'
         "500":
           description: Server error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/errorResponse'
   /relationship/{id}/profitability:
     get:
       tags:
@@ -506,7 +506,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/errorResponse'
         "401":
           description: |-
             Unauthorized, expect this for the following types of errors
@@ -532,13 +532,13 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/errorResponse'
         "500":
           description: Server error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/errorResponse'
   /deal:
     get:
       tags:
@@ -546,7 +546,7 @@ paths:
       summary: Retrieve all deals the actor is allowed to view in DealPoint
       operationId: getDeals
       parameters:
-      - name: relationship_id
+      - name: relationshipId
         in: query
         description: relationship identifier
         required: false
@@ -554,7 +554,15 @@ paths:
         explode: true
         schema:
           type: string
-      - name: relationship_name
+      - name: outerCustomerId
+        in: query
+        description: Client relationship identifier
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: customerName
         in: query
         description: (part of the) name of the relationship
         required: false
@@ -600,7 +608,7 @@ paths:
         explode: true
         schema:
           type: string
-          default: OuterDealId
+          default: outerDealId
       - name: x-system-caller
         in: header
         description: Identification of the calling application.
@@ -629,7 +637,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/errorResponse'
         "401":
           description: |-
             Unauthorized, expect this for the following types of errors
@@ -653,13 +661,13 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/errorResponse'
         "500":
           description: Server error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/errorResponse'
     post:
       tags:
       - Deal
@@ -701,14 +709,14 @@ paths:
         "201":
           description: Deal id (key)
           headers:
-            EntityId:
-              $ref: '#/components/schemas/EntityId'
+            entityId:
+              $ref: '#/components/schemas/entityId'
         "400":
           description: Invalid input value
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/errorResponse'
         "401":
           description: |-
             Unauthorized, expect this for the following types of errors
@@ -734,7 +742,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/errorResponse'
   /deal/{id}:
     get:
       tags:
@@ -779,7 +787,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/errorResponse'
         "401":
           description: |-
             Unauthorized, expect this for the following types of errors
@@ -801,17 +809,17 @@ paths:
             - AttributePrivilegeCreateIsMissing
             - InvalidAccessRights'
         "404":
-          description: Deal-id not found
+          description: dealId not found
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/errorResponse'
         "500":
           description: Server error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/errorResponse'
     delete:
       tags:
       - Deal
@@ -850,7 +858,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/errorResponse'
         "401":
           description: |-
             Unauthorized, expect this for the following types of errors
@@ -872,17 +880,17 @@ paths:
             - AttributePrivilegeCreateIsMissing
             - InvalidAccessRights
         "404":
-          description: Deal-id not found
+          description: dealId not found
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/errorResponse'
         "500":
           description: Server error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/errorResponse'
     patch:
       tags:
       - Deal
@@ -931,14 +939,14 @@ paths:
         "204":
           description: Deal id (key)
           headers:
-            EntityId:
-              $ref: '#/components/schemas/EntityId'
+            entityId:
+              $ref: '#/components/schemas/entityId'
         "400":
           description: Invalid input value
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/errorResponse'
         "401":
           description: |-
             Unauthorized, expect this for the following types of errors
@@ -960,17 +968,17 @@ paths:
             - AttributePrivilegeCreateIsMissing
             - InvalidAccessRights
         "404":
-          description: Deal-id not found
+          description: dealId not found
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/errorResponse'
         "500":
           description: Server error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/errorResponse'
   /deal/{id}/profitability:
     get:
       tags:
@@ -1022,7 +1030,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/errorResponse'
         "401":
           description: |-
             Unauthorized, expect this for the following types of errors
@@ -1044,17 +1052,17 @@ paths:
             - AttributePrivilegeCreateIsMissing
             - InvalidAccessRights'
         "404":
-          description: deal-id not found
+          description: dealId not found
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/errorResponse'
         "500":
           description: Server error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/errorResponse'
   /deal/{id}/workflow:
     get:
       tags:
@@ -1099,7 +1107,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/errorResponse'
         "401":
           description: |-
             Unauthorized, expect this for the following types of errors
@@ -1121,17 +1129,17 @@ paths:
             - AttributePrivilegeCreateIsMissing
             - InvalidAccessRights'
         "404":
-          description: deal-id not found
+          description: dealId not found
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/errorResponse'
         "500":
           description: Server error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/errorResponse'
   /deal/{id}/approval/workflow:
     get:
       tags:
@@ -1177,7 +1185,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/errorResponse'
         "401":
           description: |-
             Unauthorized, expect this for the following types of errors
@@ -1199,17 +1207,17 @@ paths:
             - AttributePrivilegeCreateIsMissing
             - InvalidAccessRights'
         "404":
-          description: deal-id not found
+          description: dealId not found
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/errorResponse'
         "500":
           description: Server error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/errorResponse'
     post:
       tags:
       - Deal
@@ -1250,14 +1258,14 @@ paths:
         "201":
           description: Deal id (key)
           headers:
-            EntityId:
-              $ref: '#/components/schemas/EntityId'
+            entityId:
+              $ref: '#/components/schemas/entityId'
         "400":
           description: Invalid input value
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/errorResponse'
         "401":
           description: |-
             Unauthorized, expect this for the following types of errors
@@ -1283,15 +1291,15 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-  /deal/{deal-id}/approval/approvalgroup/{approval-group-id}/approvers:
+                $ref: '#/components/schemas/errorResponse'
+  /deal/{dealId}/approval/approvalgroup/{approvalGroupId}/approvers:
     get:
       tags:
       - Deal
       summary: 'list of potential approvers for the deal and approval-group at hand. '
       operationId: getApproversList
       parameters:
-      - name: deal-id
+      - name: dealId
         in: path
         description: deal identifier
         required: true
@@ -1299,7 +1307,7 @@ paths:
         explode: false
         schema:
           type: string
-      - name: approval-group-id
+      - name: approvalGroupId
         in: path
         description: approval group identifier
         required: true
@@ -1335,7 +1343,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/errorResponse'
         "401":
           description: |-
             Unauthorized, expect this for the following types of errors
@@ -1357,17 +1365,17 @@ paths:
             - AttributePrivilegeCreateIsMissing
             - InvalidAccessRights'
         "404":
-          description: deal-id not found
+          description: dealId not found
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/errorResponse'
         "500":
           description: Server error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/errorResponse'
   /deal/{id}/action:
     post:
       tags:
@@ -1410,14 +1418,14 @@ paths:
         "201":
           description: Deal id (key)
           headers:
-            EntityId:
-              $ref: '#/components/schemas/EntityId'
+            entityId:
+              $ref: '#/components/schemas/entityId'
         "400":
           description: Invalid input value
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/errorResponse'
         "401":
           description: |-
             Unauthorized, expect this for the following types of errors
@@ -1443,7 +1451,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/errorResponse'
   /deal/{id}/approval/action:
     post:
       tags:
@@ -1486,14 +1494,14 @@ paths:
         "201":
           description: Deal id (key)
           headers:
-            EntityId:
-              $ref: '#/components/schemas/EntityId'
+            entityId:
+              $ref: '#/components/schemas/entityId'
         "400":
           description: Invalid input value
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/errorResponse'
         "401":
           description: |-
             Unauthorized, expect this for the following types of errors
@@ -1519,7 +1527,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/errorResponse'
   /scenario:
     get:
       tags:
@@ -1527,7 +1535,7 @@ paths:
       summary: Retrieve all Scenarios the actor is allowed to view in DealPoint
       operationId: getScenarios
       parameters:
-      - name: deal_id
+      - name: dealId
         in: query
         description: deal identifier
         required: false
@@ -1535,7 +1543,7 @@ paths:
         explode: true
         schema:
           type: string
-      - name: relationship_name
+      - name: relationshipName
         in: query
         description: (part of the) name of the relationship
         required: false
@@ -1581,7 +1589,7 @@ paths:
         explode: true
         schema:
           type: string
-          default: OuterDealId
+          default: outerDealId
       - name: x-system-caller
         in: header
         description: Identification of the calling application.
@@ -1610,7 +1618,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/errorResponse'
         "401":
           description: |-
             Unauthorized, expect this for the following types of errors
@@ -1634,13 +1642,13 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/errorResponse'
         "500":
           description: Server error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/errorResponse'
     post:
       tags:
       - Scenario
@@ -1681,14 +1689,14 @@ paths:
         "201":
           description: Deal id (key)
           headers:
-            EntityId:
-              $ref: '#/components/schemas/EntityId'
+            entityId:
+              $ref: '#/components/schemas/entityId'
         "400":
           description: Invalid input value
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/errorResponse'
         "401":
           description: |-
             Unauthorized, expect this for the following types of errors
@@ -1714,7 +1722,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/errorResponse'
   /scenario/{id}:
     get:
       tags:
@@ -1758,7 +1766,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/errorResponse'
         "401":
           description: |-
             Unauthorized, expect this for the following types of errors
@@ -1784,13 +1792,13 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/errorResponse'
         "500":
           description: Server error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/errorResponse'
     delete:
       tags:
       - Scenario
@@ -1829,7 +1837,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/errorResponse'
         "401":
           description: |-
             Unauthorized, expect this for the following types of errors
@@ -1855,13 +1863,13 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/errorResponse'
         "500":
           description: Server error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/errorResponse'
     patch:
       tags:
       - Scenario
@@ -1910,14 +1918,14 @@ paths:
         "204":
           description: Scenario id (key)
           headers:
-            EntityId:
-              $ref: '#/components/schemas/EntityId'
+            entityId:
+              $ref: '#/components/schemas/entityId'
         "400":
           description: Invalid input value
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/errorResponse'
         "401":
           description: |-
             Unauthorized, expect this for the following types of errors
@@ -1939,17 +1947,17 @@ paths:
             - AttributePrivilegeCreateIsMissing
             - InvalidAccessRights
         "404":
-          description: Deal-id not found
+          description: dealId not found
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/errorResponse'
         "500":
           description: Server error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/errorResponse'
   /scenario/{id}/profitability:
     get:
       tags:
@@ -2002,7 +2010,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/errorResponse'
         "401":
           description: |-
             Unauthorized, expect this for the following types of errors
@@ -2028,21 +2036,21 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/errorResponse'
         "500":
           description: Server error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/errorResponse'
   /counterparty:
     get:
       tags:
-      - Counterparty
+      - counterparty
       summary: Retrieve all counterparties the actor is allowed to view in DealPoint
       operationId: getCounterparties
       parameters:
-      - name: scenario_id
+      - name: scenarioId
         in: query
         description: Scenario identifier
         required: false
@@ -2050,7 +2058,7 @@ paths:
         explode: true
         schema:
           type: string
-      - name: deal_id
+      - name: dealId
         in: query
         description: Deal identifier
         required: false
@@ -2058,7 +2066,7 @@ paths:
         explode: true
         schema:
           type: string
-      - name: counterparty_id
+      - name: counterpartyId
         in: query
         description: relationship identifier
         required: false
@@ -2066,7 +2074,7 @@ paths:
         explode: true
         schema:
           type: string
-      - name: outer_customer_id
+      - name: outerCustomerId
         in: query
         description: Customer id as externally known
         required: false
@@ -2074,7 +2082,7 @@ paths:
         explode: true
         schema:
           type: string
-      - name: counterparty_name
+      - name: counterpartyName
         in: query
         description: (part of the) name of the counterparty (client)
         required: false
@@ -2120,7 +2128,7 @@ paths:
         explode: true
         schema:
           type: string
-          default: OuterRelationshipId
+          default: outerRelationshipId
       - name: x-system-caller
         in: header
         description: Identification of the calling application.
@@ -2149,7 +2157,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/errorResponse'
         "401":
           description: |-
             Unauthorized, expect this for the following types of errors
@@ -2173,18 +2181,18 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/errorResponse'
         "500":
           description: Server error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/errorResponse'
     post:
       tags:
-      - Counterparty
+      - counterparty
       summary: 'Adds a new counterparty to DealPoint. '
-      operationId: createCounterparty
+      operationId: createcounterparty
       parameters:
       - name: x-system-caller
         in: header
@@ -2212,14 +2220,14 @@ paths:
         "201":
           description: counterparty id (key)
           headers:
-            EntityId:
-              $ref: '#/components/schemas/EntityId'
+            entityId:
+              $ref: '#/components/schemas/entityId'
         "400":
           description: Invalid input value
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/errorResponse'
         "401":
           description: |-
             Unauthorized, expect this for the following types of errors
@@ -2245,14 +2253,14 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/errorResponse'
   /counterparty/{id}:
     get:
       tags:
-      - Counterparty
+      - counterparty
       summary: Retrieve a specific counterparty the actor is allowed to view from
         DealPoint.
-      operationId: getCounterparty
+      operationId: getcounterparty
       parameters:
       - name: id
         in: path
@@ -2290,7 +2298,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/errorResponse'
         "401":
           description: |-
             Unauthorized, expect this for the following types of errors
@@ -2316,18 +2324,18 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/errorResponse'
         "500":
           description: Server error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/errorResponse'
     delete:
       tags:
-      - Counterparty
+      - counterparty
       summary: Deletes the relationship from the system.
-      operationId: deleteCounterparty
+      operationId: deletecounterparty
       parameters:
       - name: id
         in: path
@@ -2361,7 +2369,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/errorResponse'
         "401":
           description: |-
             Unauthorized, expect this for the following types of errors
@@ -2383,22 +2391,22 @@ paths:
             - AttributePrivilegeCreateIsMissing
             - InvalidAccessRights
         "404":
-          description: Counterparty-id not found
+          description: counterparty-id not found
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/errorResponse'
         "500":
           description: Server error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/errorResponse'
     patch:
       tags:
-      - Counterparty
+      - counterparty
       summary: Updates the relationship with new values.
-      operationId: updateCounterparty
+      operationId: updatecounterparty
       parameters:
       - name: id
         in: path
@@ -2434,14 +2442,14 @@ paths:
         "204":
           description: relationship id (key)
           headers:
-            EntityId:
-              $ref: '#/components/schemas/EntityId'
+            entityId:
+              $ref: '#/components/schemas/entityId'
         "400":
           description: Invalid input value
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/errorResponse'
         "401":
           description: |-
             Unauthorized, expect this for the following types of errors
@@ -2467,20 +2475,20 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/errorResponse'
         "500":
           description: Server error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/errorResponse'
   /counterparty/{id}/profitability:
     get:
       tags:
-      - Counterparty
-      summary: Retrieves Counterparty profitability. If required, (Re)Calculate Counterparty
+      - counterparty
+      summary: Retrieves counterparty profitability. If required, (Re)Calculate counterparty
         profitability
-      operationId: getCounterpartyProfitability
+      operationId: getcounterpartyProfitability
       parameters:
       - name: id
         in: path
@@ -2526,7 +2534,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/errorResponse'
         "401":
           description: |-
             Unauthorized, expect this for the following types of errors
@@ -2552,13 +2560,13 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/errorResponse'
         "500":
           description: Server error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/errorResponse'
   /product:
     get:
       tags:
@@ -2566,7 +2574,7 @@ paths:
       summary: Retrieve all products the actor is allowed to view in DealPoint
       operationId: getProducts
       parameters:
-      - name: scenario_id
+      - name: scenarioId
         in: query
         description: Scenario identifier
         required: false
@@ -2574,7 +2582,7 @@ paths:
         explode: true
         schema:
           type: string
-      - name: deal_id
+      - name: dealId
         in: query
         description: Deal identifier
         required: false
@@ -2582,7 +2590,7 @@ paths:
         explode: true
         schema:
           type: string
-      - name: counterparty_id
+      - name: counterpartyId
         in: query
         description: relationship identifier
         required: false
@@ -2590,7 +2598,7 @@ paths:
         explode: true
         schema:
           type: string
-      - name: outer_customer_id
+      - name: outerCustomerId
         in: query
         description: Customer id as externally known
         required: false
@@ -2598,7 +2606,7 @@ paths:
         explode: true
         schema:
           type: string
-      - name: counterparty_name
+      - name: counterpartyName
         in: query
         description: (part of the) name of the counterparty (client)
         required: false
@@ -2644,7 +2652,7 @@ paths:
         explode: true
         schema:
           type: string
-          default: OuterRelationshipId
+          default: outerRelationshipId
       - name: x-system-caller
         in: header
         description: Identification of the calling application.
@@ -2673,7 +2681,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/errorResponse'
         "401":
           description: |-
             Unauthorized, expect this for the following types of errors
@@ -2697,13 +2705,13 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/errorResponse'
         "500":
           description: Server error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/errorResponse'
     post:
       tags:
       - Product
@@ -2744,14 +2752,14 @@ paths:
         "201":
           description: product id (key)
           headers:
-            EntityId:
-              $ref: '#/components/schemas/EntityId'
+            entityId:
+              $ref: '#/components/schemas/entityId'
         "400":
           description: Invalid input value
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/errorResponse'
         "401":
           description: |-
             Unauthorized, expect this for the following types of errors
@@ -2777,7 +2785,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/errorResponse'
   /product/{id}:
     get:
       tags:
@@ -2821,7 +2829,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/errorResponse'
         "401":
           description: |-
             Unauthorized, expect this for the following types of errors
@@ -2847,13 +2855,13 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/errorResponse'
         "500":
           description: Server error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/errorResponse'
     delete:
       tags:
       - Product
@@ -2892,7 +2900,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/errorResponse'
         "401":
           description: |-
             Unauthorized, expect this for the following types of errors
@@ -2918,13 +2926,13 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/errorResponse'
         "500":
           description: Server error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/errorResponse'
     patch:
       tags:
       - Product
@@ -2973,14 +2981,14 @@ paths:
         "204":
           description: product id (key)
           headers:
-            EntityId:
-              $ref: '#/components/schemas/EntityId'
+            entityId:
+              $ref: '#/components/schemas/entityId'
         "400":
           description: Invalid input value
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/errorResponse'
         "401":
           description: |-
             Unauthorized, expect this for the following types of errors
@@ -3006,13 +3014,13 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/errorResponse'
         "500":
           description: Server error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/errorResponse'
   /product/{id}/profitability:
     get:
       tags:
@@ -3065,7 +3073,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/errorResponse'
         "401":
           description: |-
             Unauthorized, expect this for the following types of errors
@@ -3091,22 +3099,22 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/errorResponse'
         "500":
           description: Server error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/errorResponse'
   /usercontext:
     get:
       tags:
       - User
-      summary: Based on Username, email, phonenumber or external context id,  the
+      summary: Based on userName, email, phoneNumber or external context id,  the
         UserId is retrieved from DealPoint (exact match search)
       operationId: getUserContext
       parameters:
-      - name: user_name
+      - name: userName
         in: query
         description: (part of the) name of the user
         required: false
@@ -3116,15 +3124,15 @@ paths:
           type: string
       - name: email
         in: query
-        description: Email the user
+        description: email the user
         required: false
         style: form
         explode: true
         schema:
           type: string
-      - name: phone_number
+      - name: phoneNumber
         in: query
-        description: PhoneNumber of the user
+        description: phoneNumber of the user
         required: false
         style: form
         explode: true
@@ -3150,7 +3158,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/errorResponse'
         "401":
           description: |-
             Unauthorized, expect this for the following types of errors
@@ -3174,7 +3182,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/errorResponse'
         "404":
           description: User not found
         "500":
@@ -3182,7 +3190,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/errorResponse'
   /user:
     get:
       tags:
@@ -3190,7 +3198,7 @@ paths:
       summary: Retrieve all users the actor is allowed to view in DealPoint
       operationId: getUsers
       parameters:
-      - name: user_name
+      - name: userName
         in: query
         description: (part of the) name of the user
         required: false
@@ -3200,15 +3208,15 @@ paths:
           type: string
       - name: email
         in: query
-        description: Email the user
+        description: email the user
         required: false
         style: form
         explode: true
         schema:
           type: string
-      - name: phone_number
+      - name: phoneNumber
         in: query
-        description: PhoneNumber of the user
+        description: phoneNumber of the user
         required: false
         style: form
         explode: true
@@ -3252,7 +3260,7 @@ paths:
         explode: true
         schema:
           type: string
-          default: Username
+          default: userName
       - name: x-system-caller
         in: header
         description: Identification of the calling application.
@@ -3281,7 +3289,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/errorResponse'
         "401":
           description: |-
             Unauthorized, expect this for the following types of errors
@@ -3305,13 +3313,13 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/errorResponse'
         "500":
           description: Server error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/errorResponse'
     post:
       tags:
       - User
@@ -3344,14 +3352,14 @@ paths:
         "201":
           description: user id (key)
           headers:
-            EntityId:
-              $ref: '#/components/schemas/EntityId'
+            entityId:
+              $ref: '#/components/schemas/entityId'
         "400":
           description: Invalid input value
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/errorResponse'
         "401":
           description: |-
             Unauthorized, expect this for the following types of errors
@@ -3377,13 +3385,13 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/errorResponse'
         "500":
           description: Server error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/errorResponse'
   /user/{id}:
     get:
       tags:
@@ -3427,7 +3435,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/errorResponse'
         "401":
           description: |-
             Unauthorized, expect this for the following types of errors
@@ -3453,13 +3461,13 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/errorResponse'
         "500":
           description: Server error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/errorResponse'
     delete:
       tags:
       - User
@@ -3498,7 +3506,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/errorResponse'
         "401":
           description: |-
             Unauthorized, expect this for the following types of errors
@@ -3524,13 +3532,13 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/errorResponse'
         "500":
           description: Server error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/errorResponse'
     patch:
       tags:
       - User
@@ -3571,14 +3579,14 @@ paths:
         "204":
           description: user id (key)
           headers:
-            EntityId:
-              $ref: '#/components/schemas/EntityId'
+            entityId:
+              $ref: '#/components/schemas/entityId'
         "400":
           description: Invalid input value
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/errorResponse'
         "401":
           description: |-
             Unauthorized, expect this for the following types of errors
@@ -3604,13 +3612,13 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/errorResponse'
         "500":
           description: Server error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/errorResponse'
   /user/{id}/approval:
     get:
       tags:
@@ -3693,7 +3701,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/errorResponse'
         "401":
           description: |-
             Unauthorized, expect this for the following types of errors
@@ -3717,13 +3725,13 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/errorResponse'
         "500":
           description: Server error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/errorResponse'
     post:
       tags:
       - User
@@ -3765,14 +3773,14 @@ paths:
         "201":
           description: user id (key)
           headers:
-            EntityId:
-              $ref: '#/components/schemas/EntityId'
+            entityId:
+              $ref: '#/components/schemas/entityId'
         "400":
           description: Invalid input value
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/errorResponse'
         "401":
           description: |-
             Unauthorized, expect this for the following types of errors
@@ -3798,20 +3806,20 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/errorResponse'
         "500":
           description: Server error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/errorResponse'
 components:
   schemas:
     code:
       type: string
       description: Code of the item
       example: CodeX
-    EntityId:
+    entityId:
       type: string
       description: fully qualified id of created entity
       example: '[Organization URI]/api/deal/v1.0/7eb682f1-ca75-e511-80d4-00155d2a68d1'
@@ -3819,50 +3827,50 @@ components:
       type: string
       description: Unique Id Generated by DPX
       example: 95b608ef-e1e8-e811-8111-001dd8b80c9b
-    OuterDealId:
+    outerDealId:
       type: string
       description: Unique Bank Id for Deal, typically mapped to relationship's system
         OpportunityId (for integration)
       example: 95b608ef-e1e8-e811-8111-001dd8b80c9b
-    OuterScenarioId:
+    outerScenarioId:
       type: string
       description: Unique Bank Id for Deal, typically mapped to scenarioId (for integration)
       example: 95b608ef-e1e8-e811-8111-001dd8b80c9b
-    OuterCustomerId:
+    outerCustomerId:
       type: string
       description: Unique Bank Id for Relationship (for integration)
       example: relationshipABC
-    OuterProductId:
+    outerProductId:
       type: string
       description: Unique Bank Id for borrowing entity (for integration)
       example: relationshipABC
-    ClientTypeCode:
+    clientTypeCode:
       type: string
       description: Type of relationship (Code)
       example: WSL
-    BookingStateLocationCode:
+    bookingStateLocationCode:
       type: string
       description: State where Relationship is based (code)
       example: LDN
-    CurrencyCode:
+    currencyCode:
       type: string
       description: Currency Code
       example: EUR
-    Exposure:
+    exposure:
       type: number
-      description: Exposure of the Enity
+      description: exposure of the Enity
       example: 1234533.22
     name:
       type: string
       description: name of entity
       example: Readable name
-    Description:
+    description:
       type: string
-      description: Description of entity
+      description: description of entity
       example: '....'
-    Comment:
+    comment:
       type: string
-      description: Comments added to appoval request, notes or approval.
+      description: comments added to appoval request, notes or approval.
       example: '....'
     LGDCode:
       type: string
@@ -3872,48 +3880,48 @@ components:
       type: string
       description: Probability Default (Code)
       example: AF6
-    StatusCode:
+    statusCode:
       type: string
       description: Status of the object (Code)
       example: OPN
-    ActionCode:
+    actionCode:
       type: string
       description: State transition identifier
       example: NPW
-    ReasonCode:
+    reasonCode:
       type: string
       description: Reason for state change
       example: "01"
-    StatusDate:
+    statusDate:
       type: string
       description: Deal Status Date (generated by DPX)
       format: date-time
       example: 2017-07-21T17:32:28Z
-    Syndicated:
+    syndicated:
       type: boolean
       description: Flag/checkbox to indicate Syndication Deal, financing offered by
         group of lenders
       example: true
-    SensitivityCode:
+    sensitivityCode:
       type: string
       description: Non-NDA or NDA
       example: Non-NDA
       enum:
       - Non-NDA
       - NDA
-    IsSecure:
+    isSecure:
       type: boolean
       description: Flag/checkbox to indicate Secured deal
       example: true
-    RegionCode:
+    regionCode:
       type: string
       description: Region of the relationship/Deal (Code)
       example: EU
-    CountryCode:
+    countryCode:
       type: string
       description: Location where deal is being booked (Code)
       example: UK
-    ZipCode:
+    zipCode:
       type: string
       description: Zip code information
       example: 1234 AB
@@ -3921,51 +3929,51 @@ components:
       type: string
       description: Unique Id of RM
       example: 1233445-3333
-    OuterRMId:
+    outerRMId:
       type: string
       description: Unique Id for RM provided by the Bank (for integration)
       example: John@bank.com
-    RMname:
+    RMName:
       type: string
       description: RM with point of control Deal
       example: John Doe
-    RMEmail:
+    RMemail:
       type: string
       description: Unique email Id of RM
       example: John@bank.com
-    CreditRatingTypeCode:
+    creditRatingTypeCode:
       type: string
       description: Credit Rating Type (external or internal to Bank), Code
       example: INT
-    CreditRatingCode:
+    creditRatingCode:
       type: string
       description: Risk grade (combination of PD and LGD), Code
       example: R11
-    DivisionCode:
+    divisionCode:
       type: string
       description: Division of bank
       example: WHS
-    BusinessSegmentCode:
+    businessSegmentCode:
       type: string
       description: Segment of Business line (Code)
       example: Dept. A
-    BusinessUnitCode:
+    businessUnitCode:
       type: string
       description: Business Unit of RM (Code)
       example: LPG
-    CapitalClassCode:
+    capitalClassCode:
       type: string
       description: Capital Classification (Code)
       example: CC-1
-    IndustryCategoryCode:
+    industryCategoryCode:
       type: string
       description: Primary Industry of Deal (Code)
       example: "123"
-    IndustryCode:
+    industryCode:
       type: string
       description: Industry (Code)
       example: "321"
-    PricingEventTypeCode:
+    pricingEventTypeCode:
       type: string
       description: Pricing event type - New, Existing (Imported), Refinance and Repricing
       example: Existing (Imported)
@@ -3974,174 +3982,174 @@ components:
       - Existing (Imported)
       - Refinance
       - Repricing
-    PricingEventCode:
+    pricingEventCode:
       type: string
       description: Pricing event type - New, Existing (Imported), Refinance and Repricing
       example: New
-    Notes:
+    notes:
       type: string
       description: Free-text with ability to include rich text and attach images/documents
       example: Any text
-    Hurdle:
+    hurdle:
       type: number
-      description: Deal Hurdle for RARoC or ROE or Revenue or NIM
+      description: Deal Hurdle for RARoC or RoE or revenue or NIM
       example: 0.22
-    Target:
+    target:
       type: number
-      description: Deal Target for RARoC or ROE or Revenue or NIM
+      description: Deal Target for RARoC or RoE or revenue or NIM
       example: 0.234
-    ClientAttribute...:
+    clientAttribute...:
       type: string
       description: Client specific attributes.
       example: Client defined value...
-    Username:
+    userName:
       type: string
       description: User name (used for logon)
       example: Ron@ClientA.com
-    Fullname:
+    fullName:
       type: string
-      description: Full username
+      description: Full userName
       example: Ron Bakerson
-    Email:
+    email:
       type: string
-      description: Email adress
+      description: email adress
       example: a@b.com
-    PhoneNumber:
+    phoneNumber:
       type: string
-      description: Phonenumber of entity
+      description: Phone number of entity
       example: +31623123435
-    Disabled:
+    disabled:
       type: boolean
       description: Flag/checkbox to indicate disabled user
       example: true
-    Term:
+    term:
       type: number
       description: Tenor of product
       example: 12
-    StartDate:
+    startDate:
       type: string
       description: current or future start date of product
       format: date
       example: 2021-11-04
-    MaturityDate:
+    maturityDate:
       type: string
-      description: Maturity date of product i.e. startdate+term
+      description: Maturity date of product i.e. startDate+term
       format: date
       example: 2027-11-04
-    Limit:
+    limit:
       type: number
-      description: Product Limit
+      description: Product limit
       example: 10000000
-    DrawnAmount:
+    drawnAmount:
       type: number
       description: Drawn portion of product limit
       example: 8000000
-    UtilisationRate:
+    utilisationRate:
       type: number
       description: expected average utilization, % of limit
       example: 0.8
-    CoffRate:
+    coffRate:
       type: number
       description: Different cost factors sumed up together for product variant
       example: 123321
-    PromotionCode:
+    promotionCode:
       type: string
       description: Promotion Code
       example: Disc-1
-    PromotionAmount:
+    promotionAmount:
       type: string
       description: Promotion Amount
       example: "334455"
-    Discount:
+    discount:
       type: string
-      description: Discount applies to Credit product and Benefit applies to deposit
+      description: discount applies to Credit product and Benefit applies to deposit
         product. The value could be (rate or dollar)
       example: 15%
-    DepositAnticipatedBalance:
+    depositAnticipatedBalance:
       type: number
       description: Balance
       example: 1200000
-    AvgBalance:
+    avgBalance:
       type: number
       description: Average Balance over period of time
       example: 8000000
-    DepositClientRate:
+    depositClientRate:
       type: number
       description: Client Rate for deposit product
       example: 0.02
-    MaturityInstructions:
+    maturityInstructions:
       type: string
       description: Applies to deposit product where instructions to follow on maturity
       example: Please send by wire
-    GracePeriod:
+    gracePeriod:
       type: string
       description: Applies to deposit product to change Maturity Instructions on Maturity
         of deposit
       example: 2 months
-    DiscountTypeCode:
+    discountTypeCode:
       type: string
-      description: Discount Type - Package like farmers choice
+      description: discount Type - Package like farmers choice
       example: FRM
     RWAApproachCode:
       type: string
       description: RWA like Advanced IRB, Standardized and Foundation IRB
       example: FGT
-    ProductVariantCode:
+    productVariantCode:
       type: string
       description: Specific product under a product category (ie term loan)
-      example: TERMLOAN
-    ProductCategoryCode:
+      example: termLOAN
+    productCategoryCode:
       type: string
       description: Category of products with similar purpose
       example: DEPOST
-    ProductClassCode:
+    productClassCode:
       type: string
       description: Broad class of products with similar purpose (Lending, Deposit,
         Services)
       example: SERVICES
-    Revenue:
+    revenue:
       type: number
       description: Total revenue Generated by product (Gross Interest plus fees)
       example: 2342321.12
-    Margin:
+    margin:
       type: number
-      description: Margin
+      description: margin
       example: 2342321.12
-    NetInterestIncome:
+    netInterestIncome:
       type: number
       description: Total interest paid by client less Funding Costs
       example: 2342321.12
-    FeeIncome:
+    feeIncome:
       type: number
       description: Total revenue Generated by product fees
       example: 2342321.12
-    GrossProfit:
+    grossProfit:
       type: number
       description: Gross profit achieved by the lender for the product (Net Interest
         Income + Fee Income).
       example: 2342321.12
-    FundingCosts:
+    fundingCosts:
       type: number
       description: Extendable series of any/ all lender funding costs ( treasury,
         product, liquidity,premiums, COF and adjustments)
       example: 2342321.12
-    OperatingCosts:
+    operatingCosts:
       type: number
       description: Extendable series of operating costs incurred in delivering a product
         (upfront / ongoing / broker costs).
       example: 2342321.12
-    OtherCosts:
+    otherCosts:
       type: number
       description: Other Costs
       example: 2342321.12
-    OtherGain:
+    otherGain:
       type: number
-      description: Extendable series of other gains expected by the lender.  Configurable
+      description: Extendable series of other gains expected by the lender. Configurable
         to the lender.
       example: 2342321.12
-    OtherLoss:
+    otherLoss:
       type: number
-      description: Extendable series of other losses expected by the lender.  Configurable
+      description: Extendable series of other losses expected by the lender. Configurable
         to the lender.
       example: 2342321.12
     NPBT:
@@ -4149,15 +4157,15 @@ components:
       description: Net Profit Before Tax (Gross Profit + Other Gain - Other Loss -
         Costs)
       example: 2342321.12
-    Tax:
+    tax:
       type: number
       description: Income tax amount payable by the lender on NPBT.
       example: 2342321.12
-    TaxRate:
+    taxRate:
       type: number
-      description: Tax Rate of BookingLocation
+      description: tax Rate of BookingLocation
       example: 2342321.12
-    FrankingCredit:
+    frankingCredit:
       type: number
       description: Tax credit paid by corporations to their shareholders along with
         their dividend payments
@@ -4166,35 +4174,35 @@ components:
       type: number
       description: Net Profit After Tax (NPBT – Tax + Franking Credit)
       example: 2342321.12
-    ROE:
+    RoE:
       type: number
       description: Return on Equity annualised
       example: 2342321.12
     NIM:
       type: number
-      description: Net Interest Margin (NIM) amount of money that a bank is earning
+      description: Net Interest margin (NIM) amount of money that a bank is earning
         in interest - amount it is paying in interest
       example: 2342321.12
-    RiskWeightedAssets:
+    riskWeightedAssets:
       type: number
       description: Risk Weighted Asset (RWA) based on the amount of capital required
         to reduce the risk of insolvency
       example: 2342321.12
-    RiskRate:
+    riskRate:
       type: number
       description: Extendable series of Risk Rates Configurable to the lender (credit
         risk rate, etc).
       example: 2342321.12
-    RegulatoryCapital:
+    regulatoryCapital:
       type: number
       description: Regulatory Capital (APRA mandates 8% of RWA for Aus Banks. Amount
         may vary by region).
       example: 2342321.12
-    CostOfCapital:
+    costOfCapital:
       type: number
       description: Opportunity cost of making a specific investment
       example: 2342321.12
-    CapitalCharge:
+    capitalCharge:
       type: number
       description: Capital Charge
       example: 2342321.12
@@ -4205,150 +4213,155 @@ components:
       example: 2342321.12
     RARoC:
       type: number
-      description: Risk adjusted return on capital annualised
+      description: Risk Adjusted Return on Capital annualised
       example: 2342321.12
     RoRC:
       type: number
-      description: Return on risk capital
+      description: Return on Risk Capital
       example: 2342321.12
-    RegulatoryExpectedLoss:
+    regulatoryExpectedLoss:
       type: number
       description: Any potential loss from credit risk
       example: 2342321.12
-    CapitalBenefit:
+    capitalBenefit:
       type: number
       description: Any income benefit derived from return on Regulatory Capital
       example: 2342321.12
-    ExposureatDefault:
+    exposureatDefault:
       type: number
-      description: Exposure at default (EAD)- predicted amount of loss in the event
+      description: exposure at default (EAD)- predicted amount of loss in the event
         of a default
       example: 2342321.12
-    RevenueType:
-      type: object
-      properties:
-        Revenue:
-          $ref: '#/components/schemas/Revenue'
-        Cross-Sell-Revenue:
-          $ref: '#/components/schemas/Revenue'
-        Future-Cross-Sell-Revenue:
-          $ref: '#/components/schemas/Revenue'
-        Margin:
-          $ref: '#/components/schemas/Margin'
-        NetInterestIncome:
-          $ref: '#/components/schemas/NetInterestIncome'
-        FeeIncome:
-          $ref: '#/components/schemas/FeeIncome'
-        GrossProfit:
-          $ref: '#/components/schemas/GrossProfit'
-        FundingCosts:
-          $ref: '#/components/schemas/FundingCosts'
-        OperatingCosts:
-          $ref: '#/components/schemas/OperatingCosts'
-        OtherCosts:
-          $ref: '#/components/schemas/OtherCosts'
-        OtherGain:
-          $ref: '#/components/schemas/OtherGain'
-        OtherLoss:
-          $ref: '#/components/schemas/OtherLoss'
-        NPBT:
-          $ref: '#/components/schemas/NPBT'
-        Tax:
-          $ref: '#/components/schemas/Tax'
-        TaxRate:
-          $ref: '#/components/schemas/TaxRate'
-        FrankingCredit:
-          $ref: '#/components/schemas/FrankingCredit'
-        NPAT:
-          $ref: '#/components/schemas/NPAT'
-        ROE:
-          $ref: '#/components/schemas/ROE'
-        NIM:
-          $ref: '#/components/schemas/NIM'
-        ClientAttribute...:
-          $ref: '#/components/schemas/ClientAttribute...'
-    RegulatoryCapitalType:
-      type: object
-      properties:
-        RiskWeightedAssets:
-          $ref: '#/components/schemas/RiskWeightedAssets'
-        RiskRate:
-          $ref: '#/components/schemas/RiskRate'
-        RegulatoryCapital:
-          $ref: '#/components/schemas/RegulatoryCapital'
-        CostOfCapital:
-          $ref: '#/components/schemas/CostOfCapital'
-        CapitalCharge:
-          $ref: '#/components/schemas/CapitalCharge'
-        SVA-PACC-EP:
-          $ref: '#/components/schemas/SVA-PACC-EP'
-        RARoC:
-          $ref: '#/components/schemas/RARoC'
-        RoRC:
-          $ref: '#/components/schemas/RoRC'
-        RegulatoryExpectedLoss:
-          $ref: '#/components/schemas/RegulatoryExpectedLoss'
-        CapitalBenefit:
-          $ref: '#/components/schemas/CapitalBenefit'
-        ExposureatDefault:
-          $ref: '#/components/schemas/ExposureatDefault'
-        ClientAttribute...:
-          $ref: '#/components/schemas/ClientAttribute...'
-    DateCreated:
+    dateCreated:
       type: string
       description: Date the enity was created.
       format: date-time
       example: 2020-06-18T17:32:28Z
-    CreatedBy:
+    createdBy:
       type: string
       description: The entity was created by.
       example: Ron
-    LastUpdated:
+    lastUpdated:
       type: string
       description: Date the enity was last updated.
       format: date-time
       example: 2020-06-21T01:32:28Z
-    UpdatedBy:
+    updatedBy:
       type: string
       description: The entity was last updated by.
       example: Mary
-    DateLastPriced:
+    dateLastPriced:
       type: string
       description: Date the price of enity was last updated.
       format: date-time
       example: 2020-06-21T01:31:40Z
-    LastPricedBy:
+    dateSubmitted:
+      type: string
+      description: Date the enity was submitted.
+      format: date-time
+      example: 2020-06-21T01:31:40Z
+    lastPricedBy:
       type: string
       description: The price of the entity was last updated by.
       example: Daily price updater
-    CodedType:
+    codedType:
       type: object
       properties:
         code:
           $ref: '#/components/schemas/code'
         name:
           $ref: '#/components/schemas/name'
-    TechnicalFieldsType:
+    technicalFieldsType:
       type: object
       properties:
-        DateCreated:
-          $ref: '#/components/schemas/DateCreated'
-        CreatedBy:
-          $ref: '#/components/schemas/CreatedBy'
-        LastUpdated:
-          $ref: '#/components/schemas/LastUpdated'
-        UpdatedBy:
-          $ref: '#/components/schemas/UpdatedBy'
-        DateLastPriced:
-          $ref: '#/components/schemas/DateLastPriced'
-        LastPricedBy:
-          $ref: '#/components/schemas/LastPricedBy'
-    ClientAttributeCoded:
+        dateCreated:
+          $ref: '#/components/schemas/dateCreated'
+        createdBy:
+          $ref: '#/components/schemas/createdBy'
+        lastUpdated:
+          $ref: '#/components/schemas/lastUpdated'
+        updatedBy:
+          $ref: '#/components/schemas/updatedBy'
+        dateLastPriced:
+          $ref: '#/components/schemas/dateLastPriced'
+        lastPricedBy:
+          $ref: '#/components/schemas/lastPricedBy'
+    clientAttributeCoded:
       type: object
       properties:
         id:
-          $ref: '#/components/schemas/CodedType'
+          $ref: '#/components/schemas/codedType'
       description: Client specific attribute (Code).
+    revenueType:
+      type: object
+      properties:
+        revenue:
+          $ref: '#/components/schemas/revenue'
+        crossSellRevenue:
+          $ref: '#/components/schemas/revenue'
+        futureCrossSellRevenue:
+          $ref: '#/components/schemas/revenue'
+        margin:
+          $ref: '#/components/schemas/margin'
+        netInterestIncome:
+          $ref: '#/components/schemas/netInterestIncome'
+        feeIncome:
+          $ref: '#/components/schemas/feeIncome'
+        grossProfit:
+          $ref: '#/components/schemas/grossProfit'
+        fundingCosts:
+          $ref: '#/components/schemas/fundingCosts'
+        operatingCosts:
+          $ref: '#/components/schemas/operatingCosts'
+        otherCosts:
+          $ref: '#/components/schemas/otherCosts'
+        otherGain:
+          $ref: '#/components/schemas/otherGain'
+        otherLoss:
+          $ref: '#/components/schemas/otherLoss'
+        NPBT:
+          $ref: '#/components/schemas/NPBT'
+        tax:
+          $ref: '#/components/schemas/tax'
+        taxRate:
+          $ref: '#/components/schemas/taxRate'
+        frankingCredit:
+          $ref: '#/components/schemas/frankingCredit'
+        NPAT:
+          $ref: '#/components/schemas/NPAT'
+        RoE:
+          $ref: '#/components/schemas/RoE'
+        NIM:
+          $ref: '#/components/schemas/NIM'
+        clientAttribute...:
+          $ref: '#/components/schemas/clientAttribute...'
+    regulatoryCapitalType:
+      type: object
+      properties:
+        riskWeightedAssets:
+          $ref: '#/components/schemas/riskWeightedAssets'
+        riskRate:
+          $ref: '#/components/schemas/riskRate'
+        regulatoryCapital:
+          $ref: '#/components/schemas/regulatoryCapital'
+        costOfCapital:
+          $ref: '#/components/schemas/costOfCapital'
+        capitalCharge:
+          $ref: '#/components/schemas/capitalCharge'
+        SVA-PACC-EP:
+          $ref: '#/components/schemas/SVA-PACC-EP'
+        RARoC:
+          $ref: '#/components/schemas/RARoC'
+        RoRC:
+          $ref: '#/components/schemas/RoRC'
+        regulatoryExpectedLoss:
+          $ref: '#/components/schemas/regulatoryExpectedLoss'
+        capitalBenefit:
+          $ref: '#/components/schemas/capitalBenefit'
+        exposureatDefault:
+          $ref: '#/components/schemas/exposureatDefault'
+        clientAttribute...:
+          $ref: '#/components/schemas/clientAttribute...'
     portfolioListType:
       type: object
       properties:
@@ -4356,8 +4369,8 @@ components:
           $ref: '#/components/schemas/id'
         name:
           $ref: '#/components/schemas/name'
-        ClientAttribute...:
-          $ref: '#/components/schemas/ClientAttribute...'
+        clientAttribute...:
+          $ref: '#/components/schemas/clientAttribute...'
     portfolioListUpdateType:
       type: object
       properties:
@@ -4368,18 +4381,14 @@ components:
       properties:
         id:
           $ref: '#/components/schemas/id'
-        OuterCustomerId:
-          $ref: '#/components/schemas/OuterCustomerId'
+        outerCustomerId:
+          $ref: '#/components/schemas/outerCustomerId'
         name:
           $ref: '#/components/schemas/name'
-        Region:
-          $ref: '#/components/schemas/CodedType'
-        ClientType:
-          $ref: '#/components/schemas/CodedType'
-        BookingStateLocation:
-          $ref: '#/components/schemas/CodedType'
-        ClientAttribute...:
-          $ref: '#/components/schemas/ClientAttribute...'
+        clientType:
+          $ref: '#/components/schemas/codedType'
+        clientAttribute...:
+          $ref: '#/components/schemas/clientAttribute...'
         portfolio:
           $ref: '#/components/schemas/portfolioListType'
     relationshipListUpdateType:
@@ -4392,179 +4401,91 @@ components:
       properties:
         id:
           $ref: '#/components/schemas/id'
-        OuterCustomerId:
-          $ref: '#/components/schemas/OuterCustomerId'
+        outerCustomerId:
+          $ref: '#/components/schemas/outerCustomerId'
         name:
           $ref: '#/components/schemas/name'
-        Region:
-          $ref: '#/components/schemas/RegionCode'
-        Country:
-          $ref: '#/components/schemas/CountryCode'
-        BookingStateLocation:
-          $ref: '#/components/schemas/BookingStateLocationCode'
-        ZipCode:
-          $ref: '#/components/schemas/ZipCode'
-        RMId:
-          $ref: '#/components/schemas/RMId'
-        OuterRMId:
-          $ref: '#/components/schemas/OuterRMId'
-        RMname:
-          $ref: '#/components/schemas/RMname'
-        RMEmail:
-          $ref: '#/components/schemas/RMEmail'
-        CreditRatingType:
-          $ref: '#/components/schemas/CreditRatingTypeCode'
-        CreditRatingCode:
-          $ref: '#/components/schemas/CreditRatingCode'
-        Description:
-          $ref: '#/components/schemas/Description'
-        Division:
-          $ref: '#/components/schemas/DivisionCode'
-        BusinessSegment:
-          $ref: '#/components/schemas/BusinessSegmentCode'
-        BusinessUnit:
-          $ref: '#/components/schemas/BusinessUnitCode'
-        CapitalClass:
-          $ref: '#/components/schemas/CapitalClassCode'
-        IndustryCategory:
-          $ref: '#/components/schemas/IndustryCategoryCode'
-        IndustryCode:
-          $ref: '#/components/schemas/IndustryCode'
-        Status:
-          $ref: '#/components/schemas/StatusCode'
-        PD:
-          $ref: '#/components/schemas/PDCode'
-        LGD:
-          $ref: '#/components/schemas/LGDCode'
-        RelationshipExposure:
-          $ref: '#/components/schemas/Exposure'
-        PrimaryContact:
-          $ref: '#/components/schemas/id'
-        UltimateParentId:
-          $ref: '#/components/schemas/id'
-        OuterUltimateParentId:
-          $ref: '#/components/schemas/OuterCustomerId'
-        UltimateParentname:
-          $ref: '#/components/schemas/name'
-        UltimateParentExposure:
-          $ref: '#/components/schemas/Exposure'
-        CurrencyCode:
-          $ref: '#/components/schemas/CurrencyCode'
-        Hurdle:
-          $ref: '#/components/schemas/Hurdle'
-        Target:
-          $ref: '#/components/schemas/Target'
-        ClientAttribute...:
-          $ref: '#/components/schemas/ClientAttribute...'
-        Portfolio:
+        countryCode:
+          $ref: '#/components/schemas/countryCode'
+        creditRatingType:
+          $ref: '#/components/schemas/creditRatingTypeCode'
+        creditRatingCode:
+          $ref: '#/components/schemas/creditRatingCode'
+        description:
+          $ref: '#/components/schemas/description'
+        capitalClass:
+          $ref: '#/components/schemas/capitalClassCode'
+        industryCategoryCode:
+          $ref: '#/components/schemas/industryCategoryCode'
+        industryCode:
+          $ref: '#/components/schemas/industryCode'
+        status:
+          $ref: '#/components/schemas/statusCode'
+        clientAttribute...:
+          $ref: '#/components/schemas/clientAttribute...'
+        portfolio:
           $ref: '#/components/schemas/portfolioListUpdateType'
     relationshipDetailsType:
       type: object
       properties:
         id:
           $ref: '#/components/schemas/id'
-        OuterCustomerId:
-          $ref: '#/components/schemas/OuterCustomerId'
+        outerCustomerId:
+          $ref: '#/components/schemas/outerCustomerId'
         name:
           $ref: '#/components/schemas/name'
-        Region:
-          $ref: '#/components/schemas/CodedType'
-        CountryCode:
-          $ref: '#/components/schemas/CodedType'
-        BookingStateLocation:
-          $ref: '#/components/schemas/CodedType'
-        ZipCode:
-          $ref: '#/components/schemas/ZipCode'
-        RMId:
-          $ref: '#/components/schemas/RMId'
-        OuterRMId:
-          $ref: '#/components/schemas/OuterRMId'
-        RMname:
-          $ref: '#/components/schemas/RMname'
-        RMEmail:
-          $ref: '#/components/schemas/RMEmail'
-        CreditRatingType:
-          $ref: '#/components/schemas/CodedType'
-        CreditRatingCode:
-          $ref: '#/components/schemas/CodedType'
-        Description:
-          $ref: '#/components/schemas/Description'
-        Division:
-          $ref: '#/components/schemas/CodedType'
-        BusinessSegment:
-          $ref: '#/components/schemas/CodedType'
-        BusinessUnit:
-          $ref: '#/components/schemas/CodedType'
-        CapitalClass:
-          $ref: '#/components/schemas/CodedType'
-        IndustryCategory:
-          $ref: '#/components/schemas/CodedType'
-        IndustryCode:
-          $ref: '#/components/schemas/CodedType'
-        Status:
-          $ref: '#/components/schemas/CodedType'
-        PD:
-          $ref: '#/components/schemas/CodedType'
-        LGD:
-          $ref: '#/components/schemas/CodedType'
-        RelationshipExposure:
-          $ref: '#/components/schemas/Exposure'
-        PrimaryContact:
-          $ref: '#/components/schemas/id'
-        UltimateParentId:
-          $ref: '#/components/schemas/id'
-        OuterUltimateParentId:
-          $ref: '#/components/schemas/OuterCustomerId'
-        UltimateParentname:
-          $ref: '#/components/schemas/name'
-        UltimateParentExposure:
-          $ref: '#/components/schemas/Exposure'
-        Currency:
-          $ref: '#/components/schemas/CodedType'
-        Hurdle:
-          $ref: '#/components/schemas/Hurdle'
-        Target:
-          $ref: '#/components/schemas/Target'
-        ClientAttribute...:
-          $ref: '#/components/schemas/ClientAttribute...'
-        Portfolio:
+        countryCode:
+          $ref: '#/components/schemas/codedType'
+        creditRatingType:
+          $ref: '#/components/schemas/codedType'
+        creditRatingCode:
+          $ref: '#/components/schemas/codedType'
+        description:
+          $ref: '#/components/schemas/description'
+        capitalClass:
+          $ref: '#/components/schemas/codedType'
+        industryCategory:
+          $ref: '#/components/schemas/codedType'
+        industryCode:
+          $ref: '#/components/schemas/codedType'
+        status:
+          $ref: '#/components/schemas/codedType'
+        clientAttribute...:
+          $ref: '#/components/schemas/clientAttribute...'
+        portfolio:
           $ref: '#/components/schemas/portfolioListType'
-        TechnicalFields:
-          $ref: '#/components/schemas/TechnicalFieldsType'
+        technicalFields:
+          $ref: '#/components/schemas/technicalFieldsType'
     relationshipProfitabilityType:
       type: object
       properties:
         id:
           $ref: '#/components/schemas/id'
-        Revenue:
-          $ref: '#/components/schemas/RevenueType'
-        RegulatoryCapital:
-          $ref: '#/components/schemas/RegulatoryCapitalType'
-        TechnicalFields:
-          $ref: '#/components/schemas/TechnicalFieldsType'
+        revenue:
+          $ref: '#/components/schemas/revenueType'
+        regulatoryCapital:
+          $ref: '#/components/schemas/regulatoryCapitalType'
+        technicalFields:
+          $ref: '#/components/schemas/technicalFieldsType'
     dealListType:
       type: object
       properties:
         id:
           $ref: '#/components/schemas/id'
-        OuterDealId:
-          $ref: '#/components/schemas/OuterDealId'
+        outerDealId:
+          $ref: '#/components/schemas/outerDealId'
         name:
           $ref: '#/components/schemas/name'
-        Status:
-          $ref: '#/components/schemas/CodedType'
-        StatusDate:
-          $ref: '#/components/schemas/StatusDate'
-        IsSecure:
-          $ref: '#/components/schemas/IsSecure'
-        Region:
-          $ref: '#/components/schemas/CodedType'
-        Country:
-          $ref: '#/components/schemas/CodedType'
-        RMname:
-          $ref: '#/components/schemas/RMname'
-        ClientAttribute...:
-          $ref: '#/components/schemas/ClientAttribute...'
+        status:
+          $ref: '#/components/schemas/codedType'
+        statusDate:
+          $ref: '#/components/schemas/statusDate'
+        isSecure:
+          $ref: '#/components/schemas/isSecure'
+        bookingRegion:
+          $ref: '#/components/schemas/codedType'
+        clientAttribute...:
+          $ref: '#/components/schemas/clientAttribute...'
         relationship:
           $ref: '#/components/schemas/relationshipListType'
     dealListUpdateType:
@@ -4577,129 +4498,69 @@ components:
       properties:
         id:
           $ref: '#/components/schemas/id'
-        OuterDealId:
-          $ref: '#/components/schemas/OuterDealId'
+        outerDealId:
+          $ref: '#/components/schemas/outerDealId'
         name:
           $ref: '#/components/schemas/name'
-        Status:
-          $ref: '#/components/schemas/CodedType'
-        StatusDate:
-          $ref: '#/components/schemas/StatusDate'
-        Syndicated:
-          $ref: '#/components/schemas/Syndicated'
-        Sensitivity:
-          $ref: '#/components/schemas/CodedType'
-        IsSecure:
-          $ref: '#/components/schemas/IsSecure'
-        Region:
-          $ref: '#/components/schemas/CodedType'
-        Country:
-          $ref: '#/components/schemas/CodedType'
-        BookingStateLocation:
-          $ref: '#/components/schemas/CodedType'
-        ZipCode:
-          $ref: '#/components/schemas/ZipCode'
-        RMId:
-          $ref: '#/components/schemas/RMId'
-        OuterRMId:
-          $ref: '#/components/schemas/OuterRMId'
-        RMname:
-          $ref: '#/components/schemas/RMname'
-        RMEmail:
-          $ref: '#/components/schemas/RMEmail'
-        CreditRatingType:
-          $ref: '#/components/schemas/CodedType'
-        CreditRatingCode:
-          $ref: '#/components/schemas/CodedType'
-        Division:
-          $ref: '#/components/schemas/CodedType'
-        BusinessSegment:
-          $ref: '#/components/schemas/CodedType'
-        BusinessUnit:
-          $ref: '#/components/schemas/CodedType'
-        CapitalClass:
-          $ref: '#/components/schemas/CodedType'
-        IndustryCategory:
-          $ref: '#/components/schemas/CodedType'
-        IndustryCode:
-          $ref: '#/components/schemas/IndustryCode'
-        PricingEventType:
-          $ref: '#/components/schemas/CodedType'
-        Notes:
-          $ref: '#/components/schemas/Notes'
-        Hurdle:
-          $ref: '#/components/schemas/Hurdle'
-        Target:
-          $ref: '#/components/schemas/Target'
-        ClientAttribute...:
-          $ref: '#/components/schemas/ClientAttribute...'
-        ClientAttributeCoded...:
-          $ref: '#/components/schemas/ClientAttributeCoded'
-        Relationship:
+        status:
+          $ref: '#/components/schemas/codedType'
+        statusDate:
+          $ref: '#/components/schemas/statusDate'
+        syndicated:
+          $ref: '#/components/schemas/syndicated'
+        sensitivity:
+          $ref: '#/components/schemas/codedType'
+        isSecure:
+          $ref: '#/components/schemas/isSecure'
+        bookingRegion:
+          $ref: '#/components/schemas/codedType'
+        notes:
+          $ref: '#/components/schemas/notes'
+        hurdle:
+          $ref: '#/components/schemas/hurdle'
+        target:
+          $ref: '#/components/schemas/target'
+        clientAttribute...:
+          $ref: '#/components/schemas/clientAttribute...'
+        clientAttributeCoded...:
+          $ref: '#/components/schemas/clientAttributeCoded'
+        relationship:
           $ref: '#/components/schemas/relationshipListType'
-        TechnicalFields:
-          $ref: '#/components/schemas/TechnicalFieldsType'
+        technicalFields:
+          $ref: '#/components/schemas/technicalFieldsType'
     dealType:
       type: object
       properties:
         id:
           $ref: '#/components/schemas/id'
-        OuterDealId:
-          $ref: '#/components/schemas/OuterDealId'
+        outerDealId:
+          $ref: '#/components/schemas/outerDealId'
         name:
           $ref: '#/components/schemas/name'
-        Status:
-          $ref: '#/components/schemas/StatusCode'
-        StatusDate:
-          $ref: '#/components/schemas/StatusDate'
-        Syndicated:
-          $ref: '#/components/schemas/Syndicated'
-        Sensitivity:
-          $ref: '#/components/schemas/SensitivityCode'
-        IsSecure:
-          $ref: '#/components/schemas/IsSecure'
-        Region:
-          $ref: '#/components/schemas/RegionCode'
-        Country:
-          $ref: '#/components/schemas/CountryCode'
-        BookingStateLocationCode:
-          $ref: '#/components/schemas/BookingStateLocationCode'
-        ZipCode:
-          $ref: '#/components/schemas/ZipCode'
-        RMId:
-          $ref: '#/components/schemas/RMId'
-        OuterRMId:
-          $ref: '#/components/schemas/OuterRMId'
-        RMname:
-          $ref: '#/components/schemas/RMname'
-        RMEmail:
-          $ref: '#/components/schemas/RMEmail'
-        CreditRatingType:
-          $ref: '#/components/schemas/CreditRatingTypeCode'
-        CreditRatingCode:
-          $ref: '#/components/schemas/CreditRatingCode'
-        Division:
-          $ref: '#/components/schemas/DivisionCode'
-        BusinessSegment:
-          $ref: '#/components/schemas/BusinessSegmentCode'
-        BusinessUnit:
-          $ref: '#/components/schemas/BusinessUnitCode'
-        CapitalClass:
-          $ref: '#/components/schemas/CapitalClassCode'
-        IndustryCategory:
-          $ref: '#/components/schemas/IndustryCategoryCode'
-        IndustryCode:
-          $ref: '#/components/schemas/IndustryCode'
-        PricingEventType:
-          $ref: '#/components/schemas/PricingEventTypeCode'
-        Notes:
-          $ref: '#/components/schemas/Notes'
-        Hurdle:
-          $ref: '#/components/schemas/Hurdle'
-        Target:
-          $ref: '#/components/schemas/Target'
-        ClientAttribute...:
-          $ref: '#/components/schemas/ClientAttribute...'
+        status:
+          $ref: '#/components/schemas/statusCode'
+        statusDate:
+          $ref: '#/components/schemas/statusDate'
+        syndicated:
+          $ref: '#/components/schemas/syndicated'
+        sensitivity:
+          $ref: '#/components/schemas/sensitivityCode'
+        isSecure:
+          $ref: '#/components/schemas/isSecure'
+        bookingRegion:
+          $ref: '#/components/schemas/regionCode'
+        countryCode:
+          $ref: '#/components/schemas/countryCode'
+        bookingStateLocationCode:
+          $ref: '#/components/schemas/bookingStateLocationCode'
+        notes:
+          $ref: '#/components/schemas/notes'
+        hurdle:
+          $ref: '#/components/schemas/hurdle'
+        target:
+          $ref: '#/components/schemas/target'
+        clientAttribute...:
+          $ref: '#/components/schemas/clientAttribute...'
         relationship:
           $ref: '#/components/schemas/relationshipListUpdateType'
     dealProfitabilityType:
@@ -4707,12 +4568,12 @@ components:
       properties:
         id:
           $ref: '#/components/schemas/id'
-        Revenue:
-          $ref: '#/components/schemas/RevenueType'
-        RegulatoryCapital:
-          $ref: '#/components/schemas/RegulatoryCapitalType'
-        TechnicalFields:
-          $ref: '#/components/schemas/TechnicalFieldsType'
+        revenue:
+          $ref: '#/components/schemas/revenueType'
+        regulatoryCapital:
+          $ref: '#/components/schemas/regulatoryCapitalType'
+        technicalFields:
+          $ref: '#/components/schemas/technicalFieldsType'
     dealWorkflowType:
       type: object
       properties:
@@ -4722,25 +4583,25 @@ components:
           $ref: '#/components/schemas/id'
         name:
           $ref: '#/components/schemas/name'
-        Status:
-          $ref: '#/components/schemas/CodedType'
-        ClientAttribute...:
-          $ref: '#/components/schemas/ClientAttribute...'
+        status:
+          $ref: '#/components/schemas/codedType'
+        clientAttribute...:
+          $ref: '#/components/schemas/clientAttribute...'
     approver-type:
       type: object
       properties:
         id:
           $ref: '#/components/schemas/id'
-        username:
-          $ref: '#/components/schemas/Username'
-        fullname:
-          $ref: '#/components/schemas/Fullname'
+        userName:
+          $ref: '#/components/schemas/userName'
+        fullName:
+          $ref: '#/components/schemas/fullName'
         email:
-          $ref: '#/components/schemas/Email'
+          $ref: '#/components/schemas/email'
         status:
-          $ref: '#/components/schemas/CodedType'
+          $ref: '#/components/schemas/codedType'
         approvedDate:
-          $ref: '#/components/schemas/LastUpdated'
+          $ref: '#/components/schemas/lastUpdated'
         actionHistoryId:
           $ref: '#/components/schemas/id'
     approvalGroupType:
@@ -4750,14 +4611,14 @@ components:
           $ref: '#/components/schemas/id'
         name:
           $ref: '#/components/schemas/name'
-        Status:
-          $ref: '#/components/schemas/CodedType'
-        actions-allowed:
+        status:
+          $ref: '#/components/schemas/codedType'
+        actionsAllowed:
           type: array
           items:
-            $ref: '#/components/schemas/CodedType'
-        approved-date:
-          $ref: '#/components/schemas/LastUpdated'
+            $ref: '#/components/schemas/codedType'
+        approvedDate:
+          $ref: '#/components/schemas/lastUpdated'
         approvers:
           type: array
           description: Contains a list of approvers. If the approvel is in state Draft,
@@ -4774,19 +4635,19 @@ components:
           $ref: '#/components/schemas/id'
         name:
           $ref: '#/components/schemas/name'
-        Status:
-          $ref: '#/components/schemas/CodedType'
-        actions-allowed:
+        status:
+          $ref: '#/components/schemas/codedType'
+        actionsAllowed:
           type: array
           items:
-            $ref: '#/components/schemas/CodedType'
+            $ref: '#/components/schemas/codedType'
         approvalGroups:
           type: array
           items:
             $ref: '#/components/schemas/approvalGroupType'
-        ClientAttribute...:
-          $ref: '#/components/schemas/ClientAttribute...'
-    approval-group-setup-type:
+        clientAttribute...:
+          $ref: '#/components/schemas/clientAttribute...'
+    approvalGroupSetupType:
       type: object
       properties:
         id:
@@ -4796,7 +4657,7 @@ components:
           description: Contains a list of approvers.
           items:
             $ref: '#/components/schemas/id'
-    approval-setup-type:
+    approvalSetupType:
       type: object
       properties:
         id:
@@ -4804,38 +4665,38 @@ components:
         approvalGroups:
           type: array
           items:
-            $ref: '#/components/schemas/approval-group-setup-type'
-    deal-action-type:
+            $ref: '#/components/schemas/approvalGroupSetupType'
+    dealActionType:
       type: object
       properties:
-        action-id:
-          $ref: '#/components/schemas/ActionCode'
-        reason-code:
-          $ref: '#/components/schemas/ReasonCode'
+        actionId:
+          $ref: '#/components/schemas/actionCode'
+        reasonCode:
+          $ref: '#/components/schemas/reasonCode'
         comment:
-          $ref: '#/components/schemas/Comment'
-    approval-level-action-type:
+          $ref: '#/components/schemas/comment'
+    approvalLevelActionType:
       type: object
       properties:
-        action-id:
-          $ref: '#/components/schemas/ActionCode'
+        actionId:
+          $ref: '#/components/schemas/actionCode'
         reason-code:
-          $ref: '#/components/schemas/ReasonCode'
+          $ref: '#/components/schemas/reasonCode'
         comment:
-          $ref: '#/components/schemas/Comment'
+          $ref: '#/components/schemas/comment'
     scenarioListType:
       type: object
       properties:
         id:
           $ref: '#/components/schemas/id'
-        OuterScenarioId:
-          $ref: '#/components/schemas/OuterScenarioId'
+        outerScenarioId:
+          $ref: '#/components/schemas/outerScenarioId'
         name:
           $ref: '#/components/schemas/name'
-        Status:
-          $ref: '#/components/schemas/CodedType'
-        ClientAttribute...:
-          $ref: '#/components/schemas/ClientAttribute...'
+        status:
+          $ref: '#/components/schemas/codedType'
+        clientAttribute...:
+          $ref: '#/components/schemas/clientAttribute...'
         deal:
           $ref: '#/components/schemas/dealListType'
     scenarioListUpdateType:
@@ -4848,35 +4709,35 @@ components:
       properties:
         id:
           $ref: '#/components/schemas/id'
-        OuterScenarioId:
-          $ref: '#/components/schemas/OuterScenarioId'
+        outerScenarioId:
+          $ref: '#/components/schemas/outerScenarioId'
         name:
           $ref: '#/components/schemas/name'
-        Status:
-          $ref: '#/components/schemas/CodedType'
-        StatusDate:
-          $ref: '#/components/schemas/StatusDate'
-        ClientAttribute...:
-          $ref: '#/components/schemas/ClientAttribute...'
-        Deal:
+        status:
+          $ref: '#/components/schemas/codedType'
+        statusDate:
+          $ref: '#/components/schemas/statusDate'
+        clientAttribute...:
+          $ref: '#/components/schemas/clientAttribute...'
+        deal:
           $ref: '#/components/schemas/dealListType'
-        TechnicalFields:
-          $ref: '#/components/schemas/TechnicalFieldsType'
+        technicalFields:
+          $ref: '#/components/schemas/technicalFieldsType'
     scenarioType:
       type: object
       properties:
         id:
           $ref: '#/components/schemas/id'
-        OuterScenarioId:
-          $ref: '#/components/schemas/OuterScenarioId'
+        outerScenarioId:
+          $ref: '#/components/schemas/outerScenarioId'
         name:
           $ref: '#/components/schemas/name'
-        Status:
-          $ref: '#/components/schemas/StatusCode'
-        StatusDate:
-          $ref: '#/components/schemas/StatusDate'
-        ClientAttribute...:
-          $ref: '#/components/schemas/ClientAttribute...'
+        status:
+          $ref: '#/components/schemas/statusCode'
+        statusDate:
+          $ref: '#/components/schemas/statusDate'
+        clientAttribute...:
+          $ref: '#/components/schemas/clientAttribute...'
         deal:
           $ref: '#/components/schemas/dealListUpdateType'
     scenarioProfitabilityType:
@@ -4884,29 +4745,25 @@ components:
       properties:
         id:
           $ref: '#/components/schemas/id'
-        Revenue:
-          $ref: '#/components/schemas/RevenueType'
-        RegulatoryCapital:
-          $ref: '#/components/schemas/RegulatoryCapitalType'
-        TechnicalFields:
-          $ref: '#/components/schemas/TechnicalFieldsType'
+        revenue:
+          $ref: '#/components/schemas/revenueType'
+        regulatoryCapital:
+          $ref: '#/components/schemas/regulatoryCapitalType'
+        technicalFields:
+          $ref: '#/components/schemas/technicalFieldsType'
     counterpartyListType:
       type: object
       properties:
         id:
           $ref: '#/components/schemas/id'
-        OuterCustomerId:
-          $ref: '#/components/schemas/OuterCustomerId'
+        outerCustomerId:
+          $ref: '#/components/schemas/outerCustomerId'
         name:
           $ref: '#/components/schemas/name'
-        Region:
-          $ref: '#/components/schemas/CodedType'
-        ClientType:
-          $ref: '#/components/schemas/CodedType'
-        BookingStateLocation:
-          $ref: '#/components/schemas/CodedType'
-        ClientAttribute...:
-          $ref: '#/components/schemas/ClientAttribute...'
+        clientType:
+          $ref: '#/components/schemas/codedType'
+        clientAttribute...:
+          $ref: '#/components/schemas/clientAttribute...'
         deal:
           $ref: '#/components/schemas/dealListType'
         scenario:
@@ -4921,70 +4778,28 @@ components:
       properties:
         id:
           $ref: '#/components/schemas/id'
-        OuterCustomerId:
-          $ref: '#/components/schemas/OuterCustomerId'
+        outerCustomerId:
+          $ref: '#/components/schemas/outerCustomerId'
         name:
           $ref: '#/components/schemas/name'
-        Region:
-          $ref: '#/components/schemas/RegionCode'
-        Country:
-          $ref: '#/components/schemas/CountryCode'
-        BookingStateLocation:
-          $ref: '#/components/schemas/BookingStateLocationCode'
-        ZipCode:
-          $ref: '#/components/schemas/ZipCode'
-        RMId:
-          $ref: '#/components/schemas/RMId'
-        OuterRMId:
-          $ref: '#/components/schemas/OuterRMId'
-        RMname:
-          $ref: '#/components/schemas/RMname'
-        RMEmail:
-          $ref: '#/components/schemas/RMEmail'
-        CreditRatingType:
-          $ref: '#/components/schemas/CreditRatingTypeCode'
-        CreditRatingCode:
-          $ref: '#/components/schemas/CreditRatingCode'
-        Description:
-          $ref: '#/components/schemas/Description'
-        Division:
-          $ref: '#/components/schemas/DivisionCode'
-        BusinessSegment:
-          $ref: '#/components/schemas/BusinessSegmentCode'
-        BusinessUnit:
-          $ref: '#/components/schemas/BusinessUnitCode'
-        CapitalClass:
-          $ref: '#/components/schemas/CapitalClassCode'
-        IndustryCategory:
-          $ref: '#/components/schemas/IndustryCategoryCode'
-        IndustryCode:
-          $ref: '#/components/schemas/IndustryCode'
-        Status:
-          $ref: '#/components/schemas/StatusCode'
-        PD:
-          $ref: '#/components/schemas/PDCode'
-        LGD:
-          $ref: '#/components/schemas/LGDCode'
-        RelationshipExposure:
-          $ref: '#/components/schemas/Exposure'
-        PrimaryContact:
-          $ref: '#/components/schemas/id'
-        UltimateParentId:
-          $ref: '#/components/schemas/id'
-        OuterUltimateParentId:
-          $ref: '#/components/schemas/OuterCustomerId'
-        UltimateParentname:
-          $ref: '#/components/schemas/name'
-        UltimateParentExposure:
-          $ref: '#/components/schemas/Exposure'
-        CurrencyCode:
-          $ref: '#/components/schemas/CurrencyCode'
-        Hurdle:
-          $ref: '#/components/schemas/Hurdle'
-        Target:
-          $ref: '#/components/schemas/Target'
-        ClientAttribute...:
-          $ref: '#/components/schemas/ClientAttribute...'
+        countryCode:
+          $ref: '#/components/schemas/countryCode'
+        creditRatingType:
+          $ref: '#/components/schemas/creditRatingTypeCode'
+        creditRatingCode:
+          $ref: '#/components/schemas/creditRatingCode'
+        description:
+          $ref: '#/components/schemas/description'
+        capitalClass:
+          $ref: '#/components/schemas/capitalClassCode'
+        industryCategory:
+          $ref: '#/components/schemas/industryCategoryCode'
+        industryCode:
+          $ref: '#/components/schemas/industryCode'
+        status:
+          $ref: '#/components/schemas/statusCode'
+        clientAttribute...:
+          $ref: '#/components/schemas/clientAttribute...'
         deal:
           $ref: '#/components/schemas/dealListUpdateType'
         scenario:
@@ -4994,100 +4809,62 @@ components:
       properties:
         id:
           $ref: '#/components/schemas/id'
-        OuterCustomerId:
-          $ref: '#/components/schemas/OuterCustomerId'
+        outerCustomerId:
+          $ref: '#/components/schemas/outerCustomerId'
         name:
           $ref: '#/components/schemas/name'
-        Region:
-          $ref: '#/components/schemas/CodedType'
-        CountryCode:
-          $ref: '#/components/schemas/CodedType'
-        BookingStateLocation:
-          $ref: '#/components/schemas/CodedType'
-        ZipCode:
-          $ref: '#/components/schemas/ZipCode'
-        RMId:
-          $ref: '#/components/schemas/RMId'
-        OuterRMId:
-          $ref: '#/components/schemas/OuterRMId'
-        RMname:
-          $ref: '#/components/schemas/RMname'
-        RMEmail:
-          $ref: '#/components/schemas/RMEmail'
-        CreditRatingType:
-          $ref: '#/components/schemas/CodedType'
-        CreditRatingCode:
-          $ref: '#/components/schemas/CodedType'
-        Description:
-          $ref: '#/components/schemas/Description'
-        Division:
-          $ref: '#/components/schemas/CodedType'
-        BusinessSegment:
-          $ref: '#/components/schemas/CodedType'
-        BusinessUnit:
-          $ref: '#/components/schemas/CodedType'
-        CapitalClass:
-          $ref: '#/components/schemas/CodedType'
-        IndustryCategory:
-          $ref: '#/components/schemas/CodedType'
-        IndustryCode:
-          $ref: '#/components/schemas/CodedType'
-        Status:
-          $ref: '#/components/schemas/CodedType'
-        PD:
-          $ref: '#/components/schemas/CodedType'
-        LGD:
-          $ref: '#/components/schemas/CodedType'
-        RelationshipExposure:
-          $ref: '#/components/schemas/Exposure'
-        PrimaryContact:
-          $ref: '#/components/schemas/id'
-        UltimateParentId:
-          $ref: '#/components/schemas/id'
-        OuterUltimateParentId:
-          $ref: '#/components/schemas/OuterCustomerId'
-        UltimateParentname:
-          $ref: '#/components/schemas/name'
-        UltimateParentExposure:
-          $ref: '#/components/schemas/Exposure'
-        Currency:
-          $ref: '#/components/schemas/CodedType'
-        Hurdle:
-          $ref: '#/components/schemas/Hurdle'
-        Target:
-          $ref: '#/components/schemas/Target'
-        ClientAttribute...:
-          $ref: '#/components/schemas/ClientAttribute...'
-        Deal:
+        countryCode:
+          $ref: '#/components/schemas/codedType'
+        creditRatingType:
+          $ref: '#/components/schemas/codedType'
+        creditRatingCode:
+          $ref: '#/components/schemas/codedType'
+        description:
+          $ref: '#/components/schemas/description'
+        capitalClass:
+          $ref: '#/components/schemas/codedType'
+        industryCategory:
+          $ref: '#/components/schemas/codedType'
+        industryCode:
+          $ref: '#/components/schemas/codedType'
+        status:
+          $ref: '#/components/schemas/codedType'
+        clientAttribute...:
+          $ref: '#/components/schemas/clientAttribute...'
+        deal:
           $ref: '#/components/schemas/dealListType'
-        Scenario:
+        scenario:
           $ref: '#/components/schemas/scenarioListType'
-        TechnicalFields:
-          $ref: '#/components/schemas/TechnicalFieldsType'
+        technicalFields:
+          $ref: '#/components/schemas/technicalFieldsType'
     counterpartyProfitabilityType:
       type: object
       properties:
         id:
           $ref: '#/components/schemas/id'
-        Revenue:
-          $ref: '#/components/schemas/RevenueType'
-        RegulatoryCapital:
-          $ref: '#/components/schemas/RegulatoryCapitalType'
-        TechnicalFields:
-          $ref: '#/components/schemas/TechnicalFieldsType'
+        revenue:
+          $ref: '#/components/schemas/revenueType'
+        regulatoryCapital:
+          $ref: '#/components/schemas/regulatoryCapitalType'
+        technicalFields:
+          $ref: '#/components/schemas/technicalFieldsType'
     productListType:
       type: object
       properties:
         id:
           $ref: '#/components/schemas/id'
-        OuterCustomerId:
-          $ref: '#/components/schemas/OuterCustomerId'
+        outerProductId:
+          $ref: '#/components/schemas/outerProductId'
         name:
           $ref: '#/components/schemas/name'
-        Region:
-          $ref: '#/components/schemas/CodedType'
-        ClientAttribute...:
-          $ref: '#/components/schemas/ClientAttribute...'
+        productClass:
+          $ref: '#/components/schemas/codedType'
+        productCategory:
+          $ref: '#/components/schemas/codedType'
+        productVariant:
+          $ref: '#/components/schemas/codedType'
+        clientAttribute...:
+          $ref: '#/components/schemas/clientAttribute...'
         deal:
           $ref: '#/components/schemas/dealListType'
         scenario:
@@ -5104,80 +4881,30 @@ components:
       properties:
         id:
           $ref: '#/components/schemas/id'
-        OuterProductId:
-          $ref: '#/components/schemas/OuterProductId'
+        outerProductId:
+          $ref: '#/components/schemas/outerProductId'
         name:
           $ref: '#/components/schemas/name'
-        ProductClass:
-          $ref: '#/components/schemas/ProductClassCode'
-        ProductCategory:
-          $ref: '#/components/schemas/ProductCategoryCode'
-        ProductVariant:
-          $ref: '#/components/schemas/ProductVariantCode'
-        Division:
-          $ref: '#/components/schemas/DivisionCode'
-        BusinessSegment:
-          $ref: '#/components/schemas/BusinessSegmentCode'
-        BusinessUnit:
-          $ref: '#/components/schemas/BusinessUnitCode'
-        CapitalClass:
-          $ref: '#/components/schemas/CapitalClassCode'
-        IndustryCategory:
-          $ref: '#/components/schemas/IndustryCategoryCode'
-        IndustryCode:
-          $ref: '#/components/schemas/IndustryCode'
-        PricingEvent:
-          $ref: '#/components/schemas/PricingEventCode'
-        CreditRatingType:
-          $ref: '#/components/schemas/CreditRatingTypeCode'
-        CreditRatingCode:
-          $ref: '#/components/schemas/CreditRatingCode'
-        PD:
-          $ref: '#/components/schemas/PDCode'
-        LGD:
-          $ref: '#/components/schemas/LGDCode'
-        RWAApproach:
-          $ref: '#/components/schemas/RWAApproachCode'
-        Hurdle:
-          $ref: '#/components/schemas/Hurdle'
-        Target:
-          $ref: '#/components/schemas/Target'
-        Term:
-          $ref: '#/components/schemas/Term'
-        StartDate:
-          $ref: '#/components/schemas/StartDate'
-        MaturityDate:
-          $ref: '#/components/schemas/MaturityDate'
-        Limit:
-          $ref: '#/components/schemas/Limit'
-        DrawnAmount:
-          $ref: '#/components/schemas/DrawnAmount'
-        UtilisationRate:
-          $ref: '#/components/schemas/UtilisationRate'
-        CoffRate:
-          $ref: '#/components/schemas/CoffRate'
-        Country:
-          $ref: '#/components/schemas/CountryCode'
-        PromotionCode:
-          $ref: '#/components/schemas/PromotionCode'
-        PromotionAmount:
-          $ref: '#/components/schemas/PromotionAmount'
-        DiscountType:
-          $ref: '#/components/schemas/DiscountTypeCode'
-        Discount:
-          $ref: '#/components/schemas/Discount'
-        DepositAnticipatedBalance:
-          $ref: '#/components/schemas/DepositAnticipatedBalance'
-        AvgBalance:
-          $ref: '#/components/schemas/AvgBalance'
-        DepositClientRate:
-          $ref: '#/components/schemas/DepositClientRate'
-        MaturityInstructions:
-          $ref: '#/components/schemas/MaturityInstructions'
-        GracePeriod:
-          $ref: '#/components/schemas/GracePeriod'
-        ClientAttribute...:
-          $ref: '#/components/schemas/ClientAttribute...'
+        productClass:
+          $ref: '#/components/schemas/productClassCode'
+        productCategory:
+          $ref: '#/components/schemas/productCategoryCode'
+        productVariant:
+          $ref: '#/components/schemas/productVariantCode'
+        hurdle:
+          $ref: '#/components/schemas/hurdle'
+        target:
+          $ref: '#/components/schemas/target'
+        term:
+          $ref: '#/components/schemas/term'
+        startDate:
+          $ref: '#/components/schemas/startDate'
+        coffRate:
+          $ref: '#/components/schemas/coffRate'
+        currencyCode:
+          $ref: '#/components/schemas/currencyCode'
+        clientAttribute...:
+          $ref: '#/components/schemas/clientAttribute...'
         deal:
           $ref: '#/components/schemas/dealListUpdateType'
         scenario:
@@ -5189,164 +4916,116 @@ components:
       properties:
         id:
           $ref: '#/components/schemas/id'
-        OuterProductId:
-          $ref: '#/components/schemas/OuterProductId'
+        outerProductId:
+          $ref: '#/components/schemas/outerProductId'
         name:
           $ref: '#/components/schemas/name'
-        ProductClass:
-          $ref: '#/components/schemas/CodedType'
-        ProductCategory:
-          $ref: '#/components/schemas/CodedType'
-        ProductVariant:
-          $ref: '#/components/schemas/CodedType'
-        Division:
-          $ref: '#/components/schemas/CodedType'
-        BusinessSegment:
-          $ref: '#/components/schemas/CodedType'
-        BusinessUnit:
-          $ref: '#/components/schemas/CodedType'
-        CapitalClass:
-          $ref: '#/components/schemas/CodedType'
-        IndustryCategory:
-          $ref: '#/components/schemas/CodedType'
-        IndustryCode:
-          $ref: '#/components/schemas/CodedType'
-        PricingEvent:
-          $ref: '#/components/schemas/CodedType'
-        CreditRatingType:
-          $ref: '#/components/schemas/CodedType'
-        CreditRatingCode:
-          $ref: '#/components/schemas/CodedType'
-        PD:
-          $ref: '#/components/schemas/CodedType'
-        LGD:
-          $ref: '#/components/schemas/CodedType'
-        RWAApproach:
-          $ref: '#/components/schemas/CodedType'
-        Hurdle:
-          $ref: '#/components/schemas/Hurdle'
-        Target:
-          $ref: '#/components/schemas/Target'
-        Term:
-          $ref: '#/components/schemas/Term'
-        StartDate:
-          $ref: '#/components/schemas/StartDate'
-        MaturityDate:
-          $ref: '#/components/schemas/MaturityDate'
-        Limit:
-          $ref: '#/components/schemas/Limit'
-        DrawnAmount:
-          $ref: '#/components/schemas/DrawnAmount'
-        UtilisationRate:
-          $ref: '#/components/schemas/UtilisationRate'
-        CoffRate:
-          $ref: '#/components/schemas/CoffRate'
-        Country:
-          $ref: '#/components/schemas/CodedType'
-        PromotionCode:
-          $ref: '#/components/schemas/PromotionCode'
-        PromotionAmount:
-          $ref: '#/components/schemas/PromotionAmount'
-        DiscountType:
-          $ref: '#/components/schemas/CodedType'
-        Discount:
-          $ref: '#/components/schemas/Discount'
-        DepositAnticipatedBalance:
-          $ref: '#/components/schemas/DepositAnticipatedBalance'
-        AvgBalance:
-          $ref: '#/components/schemas/AvgBalance'
-        DepositClientRate:
-          $ref: '#/components/schemas/DepositClientRate'
-        MaturityInstructions:
-          $ref: '#/components/schemas/MaturityInstructions'
-        GracePeriod:
-          $ref: '#/components/schemas/GracePeriod'
-        ClientAttribute...:
-          $ref: '#/components/schemas/ClientAttribute...'
-        Deal:
+        productClass:
+          $ref: '#/components/schemas/codedType'
+        productCategory:
+          $ref: '#/components/schemas/codedType'
+        productVariant:
+          $ref: '#/components/schemas/codedType'
+        hurdle:
+          $ref: '#/components/schemas/hurdle'
+        target:
+          $ref: '#/components/schemas/target'
+        term:
+          $ref: '#/components/schemas/term'
+        startDate:
+          $ref: '#/components/schemas/startDate'
+        coffRate:
+          $ref: '#/components/schemas/coffRate'
+        currencyCode:
+          $ref: '#/components/schemas/codedType'
+        clientAttribute...:
+          $ref: '#/components/schemas/clientAttribute...'
+        deal:
           $ref: '#/components/schemas/dealListType'
-        Scenario:
+        scenario:
           $ref: '#/components/schemas/scenarioListType'
-        Counterparty:
+        counterparty:
           $ref: '#/components/schemas/counterpartyListType'
-        TechnicalFields:
-          $ref: '#/components/schemas/TechnicalFieldsType'
+        technicalFields:
+          $ref: '#/components/schemas/technicalFieldsType'
     productProfitabilityType:
       type: object
       properties:
         id:
           $ref: '#/components/schemas/id'
-        Revenue:
-          $ref: '#/components/schemas/RevenueType'
-        RegulatoryCapital:
-          $ref: '#/components/schemas/RegulatoryCapitalType'
-        TechnicalFields:
-          $ref: '#/components/schemas/TechnicalFieldsType'
+        revenue:
+          $ref: '#/components/schemas/revenueType'
+        regulatoryCapital:
+          $ref: '#/components/schemas/regulatoryCapitalType'
+        technicalFields:
+          $ref: '#/components/schemas/technicalFieldsType'
     userContextType:
       type: object
       properties:
         id:
           $ref: '#/components/schemas/id'
-        Username:
-          $ref: '#/components/schemas/Username'
-        Disabled:
-          $ref: '#/components/schemas/Disabled'
-        ClientAttribute...:
-          $ref: '#/components/schemas/ClientAttribute...'
+        userName:
+          $ref: '#/components/schemas/userName'
+        disabled:
+          $ref: '#/components/schemas/disabled'
+        clientAttribute...:
+          $ref: '#/components/schemas/clientAttribute...'
     userListType:
       type: object
       properties:
         id:
           $ref: '#/components/schemas/id'
-        Username:
-          $ref: '#/components/schemas/Username'
-        Fullname:
-          $ref: '#/components/schemas/Fullname'
-        Email:
-          $ref: '#/components/schemas/Email'
-        PhoneNumber:
-          $ref: '#/components/schemas/PhoneNumber'
-        ClientAttribute...:
-          $ref: '#/components/schemas/ClientAttribute...'
+        userName:
+          $ref: '#/components/schemas/userName'
+        fullName:
+          $ref: '#/components/schemas/fullName'
+        email:
+          $ref: '#/components/schemas/email'
+        phoneNumber:
+          $ref: '#/components/schemas/phoneNumber'
+        clientAttribute...:
+          $ref: '#/components/schemas/clientAttribute...'
     userType:
       type: object
       properties:
         id:
           $ref: '#/components/schemas/id'
-        Username:
-          $ref: '#/components/schemas/Username'
-        Fullname:
-          $ref: '#/components/schemas/Fullname'
-        Email:
-          $ref: '#/components/schemas/Email'
-        PhoneNumber:
-          $ref: '#/components/schemas/PhoneNumber'
-        Disabled:
-          $ref: '#/components/schemas/Disabled'
-        ClientAttribute...:
-          $ref: '#/components/schemas/ClientAttribute...'
+        userName:
+          $ref: '#/components/schemas/userName'
+        fullName:
+          $ref: '#/components/schemas/fullName'
+        email:
+          $ref: '#/components/schemas/email'
+        phoneNumber:
+          $ref: '#/components/schemas/phoneNumber'
+        disabled:
+          $ref: '#/components/schemas/disabled'
+        clientAttribute...:
+          $ref: '#/components/schemas/clientAttribute...'
     userApprovalListType:
       type: object
       properties:
-        id:
+        approvalGroupId:
           $ref: '#/components/schemas/id'
         submittedBy:
           $ref: '#/components/schemas/name'
-        Status:
-          $ref: '#/components/schemas/CodedType'
+        submittedAt:
+          $ref: '#/components/schemas/dateSubmitted'
+        status:
+          $ref: '#/components/schemas/codedType'
         deal:
           $ref: '#/components/schemas/dealListType'
     approval-user-action-type:
       type: object
       properties:
-        approval-group-id:
+        approvalGroupId:
           $ref: '#/components/schemas/id'
         action-id:
-          $ref: '#/components/schemas/ActionCode'
+          $ref: '#/components/schemas/actionCode'
         reason-code:
-          $ref: '#/components/schemas/ReasonCode'
+          $ref: '#/components/schemas/reasonCode'
         comment:
-          $ref: '#/components/schemas/Comment'
+          $ref: '#/components/schemas/comment'
     relationshipList:
       type: object
       properties:
@@ -5391,8 +5070,8 @@ components:
       properties:
         dealProfitability:
           $ref: '#/components/schemas/dealProfitabilityType'
-        TechnicalFields:
-          $ref: '#/components/schemas/TechnicalFieldsType'
+        technicalFields:
+          $ref: '#/components/schemas/technicalFieldsType'
     dealWorkflow:
       type: object
       properties:
@@ -5407,8 +5086,8 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/approvalLevelType'
-        ClientAttribute...:
-          $ref: '#/components/schemas/ClientAttribute...'
+        clientAttribute...:
+          $ref: '#/components/schemas/clientAttribute...'
     approversList:
       type: object
       properties:
@@ -5416,27 +5095,27 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/userType'
-        ClientAttribute...:
-          $ref: '#/components/schemas/ClientAttribute...'
+        clientAttribute...:
+          $ref: '#/components/schemas/clientAttribute...'
     approvalSetup:
       type: object
       properties:
         approvalLevel:
           type: array
           items:
-            $ref: '#/components/schemas/approval-setup-type'
+            $ref: '#/components/schemas/approvalSetupType'
         comment:
-          $ref: '#/components/schemas/Comment'
+          $ref: '#/components/schemas/comment'
     dealAction:
       type: object
       properties:
         dealAction:
-          $ref: '#/components/schemas/deal-action-type'
+          $ref: '#/components/schemas/dealActionType'
     approvalLevelAction:
       type: object
       properties:
         approvalLevelAction:
-          $ref: '#/components/schemas/approval-level-action-type'
+          $ref: '#/components/schemas/approvalLevelActionType'
     scenarioList:
       type: object
       properties:
@@ -5532,7 +5211,7 @@ components:
       properties:
         approvalLevelAction:
           $ref: '#/components/schemas/approval-user-action-type'
-    ErrorResponse:
+    errorResponse:
       type: object
       properties:
         errorCode:
